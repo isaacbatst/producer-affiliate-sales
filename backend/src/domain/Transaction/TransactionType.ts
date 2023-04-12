@@ -1,0 +1,6 @@
+export enum TransactionType {
+  CREATOR_SELL = 1,
+  AFFILIATE_SELL = 2,
+  COMMISSION_PAYMENT = 3,
+  COMMISION_RECEIVEMENT = 4,
+}
