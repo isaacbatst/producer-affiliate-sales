@@ -4,7 +4,7 @@ type UserParams = {
   balance: number;
 };
 
-export class User {
+export class Seller {
   private readonly id: string;
   private readonly name: string;
   private balance: number;
