@@ -11,7 +11,7 @@ type CreditTransactionParams = TransactionParams & {
 };
 
 export class CreditTransaction extends Transaction {
-  protected override readonly type: CreditTransactionType;
+  protected override readonly type!: CreditTransactionType;
 
   constructor(params: CreditTransactionParams) {
     super(params);

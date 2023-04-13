@@ -4,7 +4,7 @@ import { TransactionType } from './TransactionType';
 type DebitTransactionType = TransactionType.COMMISSION_PAYMENT;
 
 export class DebitTransaction extends Transaction {
-  protected override readonly type: DebitTransactionType;
+  protected override readonly type!: DebitTransactionType;
 
   constructor(params: Omit<TransactionParams, 'type'>) {
     super({
