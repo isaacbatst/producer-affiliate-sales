@@ -14,38 +14,47 @@ type Input = {
 export class TransactionsListFactory {
   private unregisteredSellers: Seller[] = [];
 
-  constructor(
-    private readonly inputs: Input[],
-    private readonly registeredSellers: Seller[],
-    private readonly idGenerator: IdGenerator,
-  ) {}
+  constructor(private readonly idGenerator: IdGenerator) {}
 
-  async create(): Promise<{
-    transactions: Transaction[];
-    unregisteredSellers: Seller[];
-  }> {
+  public async create(
+    inputs: Input[],
+    registeredSellers: Seller[],
+  ): Promise<Transaction[]> {
     const transactions = await Promise.all(
-      this.inputs.map((input) => this.createTransaction(input)),
+      inputs.map(async (input) => {
+        const seller = await this.getSeller(
+          input.sellerName,
+          registeredSellers,
+        );
+        return this.createTransaction(input, seller);
+      }),
     );
 
-    return {
-      transactions,
-      unregisteredSellers: this.unregisteredSellers,
-    };
+    return transactions;
   }
 
-  private async createTransaction(input: Input): Promise<Transaction> {
+  public getUnregisteredSellers(): Seller[] {
+    return this.unregisteredSellers;
+  }
+
+  private async createTransaction(
+    input: Input,
+    seller: Seller,
+  ): Promise<Transaction> {
     const transactionId = await this.idGenerator.generate();
 
     return TransactionFactory.create({
       ...input,
       id: transactionId,
-      seller: await this.getSeller(input.sellerName),
+      seller,
     });
   }
 
-  private async getSeller(sellerName: string): Promise<Seller> {
-    const registeredSeller = this.registeredSellers.find(
+  private async getSeller(
+    sellerName: string,
+    registeredSellers: Seller[],
+  ): Promise<Seller> {
+    const registeredSeller = registeredSellers.find(
       (seller) => seller.getName() === sellerName,
     );
     if (!registeredSeller) {

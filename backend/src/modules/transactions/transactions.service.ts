@@ -29,12 +29,15 @@ export class TransactionsService {
       sellersNames,
     );
     const transactionsListFactory = new TransactionsListFactory(
-      inputs,
-      registeredSellers,
       this.idGenerator,
     );
-    const { transactions, unregisteredSellers } =
-      await transactionsListFactory.create();
+    const transactions = await transactionsListFactory.create(
+      inputs,
+      registeredSellers,
+    );
+
+    const unregisteredSellers =
+      transactionsListFactory.getUnregisteredSellers();
 
     transactions.forEach((transaction) => {
       transaction.apply();
