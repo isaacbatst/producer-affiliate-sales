@@ -1,9 +1,11 @@
 import { IdGenerator } from './IdGenerator';
 
 export class IdGeneratorFake implements IdGenerator {
-  generated = 'id';
+  count = 0;
+  baseId = 'id';
 
   async generate(): Promise<string> {
-    return this.generated;
+    this.count++;
+    return `${this.baseId}-${this.count}`;
   }
 }
