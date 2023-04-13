@@ -7,9 +7,11 @@ export type TransactionParams = {
   product: string;
   value: number;
   seller: Seller;
+  id: string;
 };
 
 export abstract class Transaction {
+  private readonly id: string;
   private readonly date: Date;
   private readonly product: string;
   private readonly value: number;
@@ -22,9 +24,14 @@ export abstract class Transaction {
     this.product = params.product;
     this.value = params.value;
     this.seller = params.seller;
+    this.id = params.id;
   }
 
   public abstract apply(): void;
+
+  public getId(): string {
+    return this.id;
+  }
 
   public getType(): TransactionType {
     return this.type;

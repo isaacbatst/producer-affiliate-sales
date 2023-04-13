@@ -14,6 +14,7 @@ const makeSut = () => {
     value: 10,
     date,
     seller,
+    id: 'transaction-id',
   });
 
   return {

@@ -14,6 +14,7 @@ const makeSut = () => {
     value: 10,
     date,
     seller,
+    id: 'transaction-id',
     type: TransactionType.AFFILIATE_SELL,
   });
 
