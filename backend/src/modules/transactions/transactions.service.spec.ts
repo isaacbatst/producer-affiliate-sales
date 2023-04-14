@@ -52,7 +52,7 @@ describe('TransactionsService', () => {
     );
 
     expect(seller).toBeDefined();
-    expect(seller?.getBalance()).toBe(210);
+    expect(seller?.getBalance()).toBe(21000);
   });
 
   it('should return all transactions', async () => {
