@@ -13,4 +13,4 @@ import { SellersService } from './sellers.service';
     },
   ],
 })
-export class TransactionsModule {}
+export class SellersModule {}
