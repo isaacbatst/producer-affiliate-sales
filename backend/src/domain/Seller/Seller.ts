@@ -1,4 +1,4 @@
-type UserParams = {
+type SellerParams = {
   id: string;
   name: string;
   balance: number;
@@ -9,7 +9,7 @@ export class Seller {
   private readonly name: string;
   private balance: number;
 
-  constructor(params: UserParams) {
+  constructor(params: SellerParams) {
     this.id = params.id;
     this.name = params.name;
     this.balance = params.balance;

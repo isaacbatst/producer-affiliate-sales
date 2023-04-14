@@ -1,8 +1,8 @@
-import { FileReaderFs } from '../../infra/common/FileReader/FileReaderFs';
-import { TransactionDto } from './transactions.dto';
-import { Constants } from '../../common/constants';
-import { MulterFileFactory } from '../../infra/common/MulterFileFactory/MulterFileFactory';
 import * as path from 'path';
+import { Constants } from '../../common/constants';
+import { FileReaderFs } from '../../infra/common/FileReader/FileReaderFs';
+import { MulterFileFactory } from '../../infra/common/MulterFileFactory/MulterFileFactory';
+import { TransactionDto } from './transactions.dto';
 
 export const getSalesFileMock = async () => {
   const fileReader = new FileReaderFs();

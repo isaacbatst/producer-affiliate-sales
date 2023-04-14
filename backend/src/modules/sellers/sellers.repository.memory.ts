@@ -3,6 +3,10 @@ import { SellersRepository } from './sellers.repository';
 
 export class SellersRepositoryMemory implements SellersRepository {
   sellers: Seller[] = [];
+
+  async getAll(): Promise<Seller[]> {
+    return this.sellers;
+  }
   async getByNames(names: string[]): Promise<Seller[]> {
     return this.sellers.filter((seller) => names.includes(seller.getName()));
   }
