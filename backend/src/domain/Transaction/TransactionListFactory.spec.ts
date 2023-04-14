@@ -49,4 +49,21 @@ describe('TransactionListFactory', () => {
     expect(unregisteredSellers).toHaveLength(1);
     expect(unregisteredSellers[0].getName()).toBe('JOSE CARLOS');
   });
+
+  it('should create unregistered sellers once', async () => {
+    const { inputs, transactionsListFactory } = makeSut();
+    inputs.push({
+      type: 1,
+      date: new Date('2022-01-15T19:20:30-03:00'),
+      product: 'CURSO DE BEM-ESTAR',
+      value: 127.5,
+      sellerName: 'JOSE CARLOS',
+    });
+    await transactionsListFactory.create(inputs, [
+      new Seller({ id: 'seller-id', name: 'MARIA CANDIDA', balance: 0 }),
+    ]);
+    const unregisteredSellers =
+      transactionsListFactory.getUnregisteredSellers();
+    expect(unregisteredSellers).toHaveLength(1);
+  });
 });

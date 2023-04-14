@@ -20,15 +20,13 @@ export class TransactionsListFactory {
     inputs: Input[],
     registeredSellers: Seller[],
   ): Promise<Transaction[]> {
-    const transactions = await Promise.all(
-      inputs.map(async (input) => {
-        const seller = await this.getSeller(
-          input.sellerName,
-          registeredSellers,
-        );
-        return this.createTransaction(input, seller);
-      }),
-    );
+    const transactions: Transaction[] = [];
+
+    for (const input of inputs) {
+      const seller = await this.getSeller(input.sellerName, registeredSellers);
+      const transaction = await this.createTransaction(input, seller);
+      transactions.push(transaction);
+    }
 
     return transactions;
   }
