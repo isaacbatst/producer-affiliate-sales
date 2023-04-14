@@ -3,7 +3,7 @@ import { Constants } from '../../common/constants';
 import { IdGeneratorFake } from '../../infra/common/IdGenerator/IdGeneratorFake';
 import { SellersRepositoryMemory } from '../sellers/sellers.repository.memory';
 import { TransactionsController } from './transactions.controller';
-import { TransactionsRepositoryMemory } from './transactions.repository.memory';
+import { TransactionsRepositoryMemory } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryMemory';
 import { TransactionsService } from './transactions.service';
 import { FileReaderFs } from '../../infra/common/FileReader/FileReaderFs';
 import { MulterFileFactory } from '../../infra/common/MulterFileFactory/MulterFileFactory';

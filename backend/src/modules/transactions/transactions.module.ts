@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
-import { TransactionsRepositoryMemory } from './transactions.repository.memory';
+import { TransactionsRepositoryMemory } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryMemory';
 import { IdGeneratorFake } from 'src/infra/common/IdGenerator/IdGeneratorFake';
 import { SellersRepositoryMemory } from '../sellers/sellers.repository.memory';
 import { TransactionsController } from './transactions.controller';

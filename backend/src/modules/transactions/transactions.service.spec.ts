@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TransactionsService } from './transactions.service';
-import { TransactionsRepositoryMemory } from './transactions.repository.memory';
+import { TransactionsRepositoryMemory } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryMemory';
 import { SellersRepositoryMemory } from '../sellers/sellers.repository.memory';
 import { IdGeneratorFake } from '../../infra/common/IdGenerator/IdGeneratorFake';
 import { getTransactionsMock } from './transactions.mock';
