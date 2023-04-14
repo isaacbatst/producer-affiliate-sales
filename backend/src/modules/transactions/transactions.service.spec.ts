@@ -3,6 +3,7 @@ import { TransactionsService } from './transactions.service';
 import { TransactionsRepositoryMemory } from './transactions.repository.memory';
 import { SellersRepositoryMemory } from '../sellers/sellers.repository.memory';
 import { IdGeneratorFake } from '../../infra/common/IdGenerator/IdGeneratorFake';
+import { getTransactionsMock } from './transactions.mock';
 
 describe('TransactionsService', () => {
   let service: TransactionsService;
@@ -29,6 +30,8 @@ describe('TransactionsService', () => {
     }).compile();
 
     service = module.get<TransactionsService>(TransactionsService);
+    sellersRepository.sellers = [];
+    transactionsRepository.transactions = [];
   });
 
   it('should be defined', () => {
@@ -36,26 +39,19 @@ describe('TransactionsService', () => {
   });
 
   it('should process transactions', async () => {
-    const transactions = [
-      {
-        type: 1,
-        date: new Date('2022-01-15T19:20:30-03:00'),
-        product: 'CURSO DE BEM-ESTAR',
-        value: 127.5,
-        sellerName: 'JOSE CARLOS',
-      },
-      {
-        type: 1,
-        date: new Date('2021-12-03T11:46:02-03:00'),
-        product: 'DOMINANDO INVESTIMENTOS',
-        value: 500,
-        sellerName: 'MARIA CANDIDA',
-      },
-    ];
+    await service.processTransactions(getTransactionsMock());
 
-    await service.processTransactions(transactions);
+    expect(transactionsRepository.transactions).toHaveLength(20);
+    expect(sellersRepository.sellers).toHaveLength(7);
+  });
 
-    expect(transactionsRepository.transactions).toHaveLength(2);
-    expect(sellersRepository.sellers).toHaveLength(2);
+  it('should update sellers balance', async () => {
+    await service.processTransactions(getTransactionsMock());
+    const seller = sellersRepository.sellers.find(
+      (seller) => seller.getName() === 'JOSE CARLOS',
+    );
+
+    expect(seller).toBeDefined();
+    expect(seller?.getBalance()).toBe(210);
   });
 });

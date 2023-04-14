@@ -4,7 +4,7 @@ import { IdGenerator } from '../../infra/common/IdGenerator/IdGenerator';
 import { SellersRepository } from '../sellers/sellers.repository';
 import { TransactionsRepository } from './transactions.repository';
 
-type Input = {
+export type ProcessTransactionsInput = {
   type: number;
   date: Date;
   product: string;
@@ -23,7 +23,7 @@ export class TransactionsService {
     private readonly idGenerator: IdGenerator,
   ) {}
 
-  async processTransactions(inputs: Input[]) {
+  async processTransactions(inputs: ProcessTransactionsInput[]) {
     const sellersNames = inputs.map((input) => input.sellerName);
     const registeredSellers = await this.sellersRepository.getByNames(
       sellersNames,
