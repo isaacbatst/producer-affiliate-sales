@@ -1,26 +1,18 @@
 import { Module } from '@nestjs/common';
-import { TransactionsService } from './transactions.service';
-import { TransactionsRepositoryMemory } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryMemory';
-import { IdGeneratorFake } from 'src/infra/common/IdGenerator/IdGeneratorFake';
-import { SellersRepositoryMemory } from '../sellers/sellers.repository.memory';
+import { DatasourceModule } from '../datasource/datasource.module';
 import { TransactionsController } from './transactions.controller';
+import { TransactionsService } from './transactions.service';
+import { IdGeneratorFake } from 'src/infra/common/IdGenerator/IdGeneratorFake';
 
 @Module({
   controllers: [TransactionsController],
   providers: [
     TransactionsService,
     {
-      provide: 'TRANSACTIONS_REPOSITORY',
-      useValue: new TransactionsRepositoryMemory(),
-    },
-    {
-      provide: 'SELLERS_REPOSITORY',
-      useValue: new SellersRepositoryMemory(),
-    },
-    {
       provide: 'ID_GENERATOR',
       useValue: new IdGeneratorFake(),
     },
   ],
+  imports: [DatasourceModule],
 })
 export class TransactionsModule {}
