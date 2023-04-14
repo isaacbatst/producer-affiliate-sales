@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TransactionsRepositoryMemory } from 'src/infra/repositories/TransactionsRepository/TransactionsRepositoryMemory';
+import { TransactionsRepositoryMemory } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryMemory';
 import { SellersRepositoryMemory } from '../sellers/sellers.repository.memory';
 
 @Module({

@@ -10,11 +10,11 @@ export const getSalesFileMock = async () => {
     path.join(Constants.ROOT_DIR, 'sample', 'sales.txt'),
   );
   const file = await MulterFileFactory.create(buffer, {
-    destination: path.join(Constants.ROOT_DIR, 'samples'),
+    destination: path.join(Constants.ROOT_DIR, 'sample'),
     fieldname: 'sales',
     filename: `sales-${Date.now()}.txt`,
     originalname: 'sales.txt',
-    path: path.join(Constants.ROOT_DIR, 'samples', 'sales.txt'),
+    path: path.join(Constants.ROOT_DIR, 'sample', 'sales.txt'),
   });
 
   return file;
