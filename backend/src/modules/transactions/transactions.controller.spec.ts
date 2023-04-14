@@ -1,13 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Constants } from '../../common/constants';
 import { IdGeneratorFake } from '../../infra/common/IdGenerator/IdGeneratorFake';
+import { TransactionsRepositoryMemory } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryMemory';
 import { SellersRepositoryMemory } from '../sellers/sellers.repository.memory';
 import { TransactionsController } from './transactions.controller';
-import { TransactionsRepositoryMemory } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryMemory';
 import { TransactionsService } from './transactions.service';
-import { FileReaderFs } from '../../infra/common/FileReader/FileReaderFs';
-import { MulterFileFactory } from '../../infra/common/MulterFileFactory/MulterFileFactory';
-import { join as joinPath } from 'path';
+import { getSalesFileMock } from './transactions.mock';
 
 describe('TransactionsController', () => {
   let controller: TransactionsController;
@@ -35,6 +32,8 @@ describe('TransactionsController', () => {
     }).compile();
 
     controller = module.get<TransactionsController>(TransactionsController);
+    transactionsRepository.transactions = [];
+    sellersRepository.sellers = [];
   });
 
   it('should be defined', () => {
@@ -42,21 +41,16 @@ describe('TransactionsController', () => {
   });
 
   it('should process transactions', async () => {
-    const fileReader = new FileReaderFs();
-    const buffer = await fileReader.toBuffer(
-      joinPath(Constants.ROOT_DIR, 'sample', 'sales.txt'),
-    );
-    const file = await MulterFileFactory.create(buffer, {
-      destination: joinPath(Constants.ROOT_DIR, 'samples'),
-      fieldname: 'sales',
-      filename: `sales-${Date.now()}.txt`,
-      originalname: 'sales.txt',
-      path: joinPath(Constants.ROOT_DIR, 'samples', 'sales.txt'),
-    });
-
+    const file = await getSalesFileMock();
     await controller.processTransactions(file);
-
     expect(transactionsRepository.transactions).toHaveLength(20);
     expect(sellersRepository.sellers).toHaveLength(7);
+  });
+
+  it('should return all transactions', async () => {
+    const file = await getSalesFileMock();
+    await controller.processTransactions(file);
+    const transactions = await controller.getAll();
+    expect(transactions).toHaveLength(20);
   });
 });

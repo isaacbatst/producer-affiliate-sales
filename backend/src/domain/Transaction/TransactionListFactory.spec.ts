@@ -6,14 +6,14 @@ const makeSut = () => {
   const inputs = [
     {
       type: 1,
-      date: new Date('2022-01-15T19:20:30-03:00'),
+      date: '2022-01-15T19:20:30-03:00',
       product: 'CURSO DE BEM-ESTAR',
       value: 127.5,
       sellerName: 'JOSE CARLOS',
     },
     {
       type: 1,
-      date: new Date('2021-12-03T11:46:02-03:00'),
+      date: '2021-12-03T11:46:02-03:00',
       product: 'DOMINANDO INVESTIMENTOS',
       value: 500,
       sellerName: 'MARIA CANDIDA',
@@ -35,8 +35,8 @@ describe('TransactionListFactory', () => {
     const { inputs, transactionsListFactory } = makeSut();
     const transactions = await transactionsListFactory.create(inputs, []);
     expect(transactions).toHaveLength(2);
-    expect(transactions[0].getDate()).toBe(inputs[0].date);
-    expect(transactions[1].getDate()).toBe(inputs[1].date);
+    expect(transactions[0].getDate()).toEqual(new Date(inputs[0].date));
+    expect(transactions[1].getDate()).toEqual(new Date(inputs[1].date));
   });
 
   it('should create unregistered sellers', async () => {
@@ -54,7 +54,7 @@ describe('TransactionListFactory', () => {
     const { inputs, transactionsListFactory } = makeSut();
     inputs.push({
       type: 1,
-      date: new Date('2022-01-15T19:20:30-03:00'),
+      date: '2022-01-15T19:20:30-03:00',
       product: 'CURSO DE BEM-ESTAR',
       value: 127.5,
       sellerName: 'JOSE CARLOS',

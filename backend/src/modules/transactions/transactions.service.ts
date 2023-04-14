@@ -3,17 +3,21 @@ import { TransactionsListFactory } from '../../domain/Transaction/TransactionLis
 import { IdGenerator } from '../../infra/common/IdGenerator/IdGenerator';
 import { SellersRepository } from '../sellers/sellers.repository';
 import { TransactionsRepository } from './transactions.repository';
-
-export type ProcessTransactionsInput = {
-  type: number;
-  date: Date;
-  product: string;
-  value: number;
-  sellerName: string;
-};
+import { TransactionDto } from './transactions.dto';
+import { Transaction } from 'src/domain/Transaction/Transaction';
 
 @Injectable()
 export class TransactionsService {
+  static toDto(transaction: Transaction): TransactionDto {
+    return {
+      type: transaction.getType(),
+      date: transaction.getDate().toISOString(),
+      product: transaction.getProduct(),
+      value: transaction.getValue(),
+      sellerName: transaction.getSeller().getName(),
+    };
+  }
+
   constructor(
     @Inject('TRANSACTIONS_REPOSITORY')
     private readonly transactionsRepository: TransactionsRepository,
@@ -23,7 +27,7 @@ export class TransactionsService {
     private readonly idGenerator: IdGenerator,
   ) {}
 
-  async processTransactions(inputs: ProcessTransactionsInput[]) {
+  async processTransactions(inputs: TransactionDto[]) {
     const sellersNames = inputs.map((input) => input.sellerName);
     const registeredSellers = await this.sellersRepository.getByNames(
       sellersNames,
@@ -48,5 +52,10 @@ export class TransactionsService {
       this.sellersRepository.updateMany(registeredSellers),
       this.transactionsRepository.createMany(transactions),
     ]);
+  }
+
+  async getAll(): Promise<TransactionDto[]> {
+    const transactions = await this.transactionsRepository.getAll();
+    return transactions.map(TransactionsService.toDto);
   }
 }

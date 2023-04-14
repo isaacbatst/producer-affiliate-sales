@@ -5,7 +5,7 @@ import { TransactionFactory } from './TransactionFactory';
 
 type Input = {
   type: number;
-  date: Date;
+  date: string;
   product: string;
   value: number;
   sellerName: string;
@@ -45,6 +45,7 @@ export class TransactionsListFactory {
       ...input,
       id: transactionId,
       seller,
+      date: new Date(input.date),
     });
   }
 

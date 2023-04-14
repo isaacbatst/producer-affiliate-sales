@@ -54,4 +54,10 @@ describe('TransactionsService', () => {
     expect(seller).toBeDefined();
     expect(seller?.getBalance()).toBe(210);
   });
+
+  it('should return all transactions', async () => {
+    await service.processTransactions(getTransactionsMock());
+    const transactions = await service.getAll();
+    expect(transactions).toHaveLength(20);
+  });
 });

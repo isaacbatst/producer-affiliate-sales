@@ -7,4 +7,8 @@ export class TransactionsRepositoryMemory implements TransactionsRepository {
   async createMany(transaction: Transaction[]): Promise<void> {
     this.transactions.push(...transaction);
   }
+
+  async getAll(): Promise<Transaction[]> {
+    return this.transactions;
+  }
 }

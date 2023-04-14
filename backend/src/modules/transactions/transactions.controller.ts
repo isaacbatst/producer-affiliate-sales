@@ -1,6 +1,7 @@
 import {
   Controller,
   FileTypeValidator,
+  Get,
   HttpCode,
   MaxFileSizeValidator,
   ParseFilePipe,
@@ -35,5 +36,11 @@ export class TransactionsController {
     const fileToTransactionsPipe = new FileToTransactionsPipe();
     const inputs = fileToTransactionsPipe.transform(file);
     await this.transactionsService.processTransactions(inputs);
+  }
+
+  @Get()
+  async getAll() {
+    const transactions = await this.transactionsService.getAll();
+    return transactions;
   }
 }
