@@ -4,7 +4,16 @@ export type TransactionDto = {
   date: string;
   product: string;
   value: number;
-  sellerName: string;
+  seller: {
+    id: string;
+    name: string;
+  };
 };
 
-export type CreateTransactionDto = Omit<TransactionDto, 'id'>;
+export type CreateTransactionDto = {
+  type: number;
+  date: string;
+  product: string;
+  value: number;
+  sellerName: string;
+};

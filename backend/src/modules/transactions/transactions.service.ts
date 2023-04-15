@@ -14,7 +14,10 @@ export class TransactionsService {
       date: transaction.getDate().toISOString(),
       product: transaction.getProduct(),
       value: transaction.getValue(),
-      sellerName: transaction.getSeller().getName(),
+      seller: {
+        id: transaction.getSeller().getId(),
+        name: transaction.getSeller().getName(),
+      },
       id: transaction.getId(),
     };
   }
