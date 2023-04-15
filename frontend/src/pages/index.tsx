@@ -1,10 +1,10 @@
 import Header from '@/components/Header'
 import SalesForm from '@/components/Home/SalesForm'
-import { ApiGatewayFake } from '@/infra/gateways/ApiGatewayFake'
+import { ApiGatewayFactory } from '@/infra/gateways/ApiGatewayFactory'
 import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
-const apiGateway = new ApiGatewayFake()
+const apiGateway = ApiGatewayFactory.make()
 
 export default function Home() {
   return (
