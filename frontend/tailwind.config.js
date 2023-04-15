@@ -15,7 +15,7 @@ module.exports = {
       colors: {
         'theme-yellow': {
           '500': '#d8ff5f',
-          '600': '#b5d354',
+          '600': '#bfe254',
         } 
       }
     },
