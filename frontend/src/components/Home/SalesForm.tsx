@@ -1,5 +1,6 @@
 import { ApiGateway } from '@/infra/gateways/ApiGateway'
 import React, { FormEvent, useState } from 'react'
+import { useSWRConfig } from "swr"
 
 const salesInputId = 'sales-input'
 
@@ -9,6 +10,7 @@ type Props = {
 
 const SalesForm: React.FC<Props> = ({ apiGateway }: Props) => {
   const [successfullyProcessed, setSuccessfullyProcessed] = useState(false);
+  const { mutate } = useSWRConfig()
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -19,6 +21,7 @@ const SalesForm: React.FC<Props> = ({ apiGateway }: Props) => {
         return
       }
       await apiGateway.processTransactions(input.files[0])
+      await mutate('transactions')
       setSuccessfullyProcessed(true)
     } catch (err) {
       console.error(err)
@@ -26,7 +29,7 @@ const SalesForm: React.FC<Props> = ({ apiGateway }: Props) => {
   }
 
   return (
-    <div className='flex flex-col flex-1 justify-center items-center'>
+    <div className='flex flex-col justify-center items-center py-10'>
       <form onSubmit={onSubmit} role='form' className='flex flex-col items-center'>
         <div className="flex flex-col">
           <label htmlFor={salesInputId} className='text-center'>Arquivo de Vendas</label>

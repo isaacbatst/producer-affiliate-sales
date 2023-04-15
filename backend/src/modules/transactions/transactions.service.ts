@@ -3,7 +3,7 @@ import { TransactionsListFactory } from '../../domain/Transaction/TransactionLis
 import { IdGenerator } from '../../infra/common/IdGenerator/IdGenerator';
 import { SellersRepository } from '../sellers/sellers.repository';
 import { TransactionsRepository } from './transactions.repository';
-import { TransactionDto } from './transactions.dto';
+import { CreateTransactionDto, TransactionDto } from './transactions.dto';
 import { Transaction } from 'src/domain/Transaction/Transaction';
 
 @Injectable()
@@ -15,6 +15,7 @@ export class TransactionsService {
       product: transaction.getProduct(),
       value: transaction.getValue(),
       sellerName: transaction.getSeller().getName(),
+      id: transaction.getId(),
     };
   }
 
@@ -27,7 +28,7 @@ export class TransactionsService {
     private readonly idGenerator: IdGenerator,
   ) {}
 
-  async processTransactions(inputs: TransactionDto[]) {
+  async processTransactions(inputs: CreateTransactionDto[]) {
     const sellersNames = inputs.map((input) => input.sellerName);
     const registeredSellers = await this.sellersRepository.getByNames(
       sellersNames,

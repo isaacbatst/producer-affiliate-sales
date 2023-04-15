@@ -1,3 +1,4 @@
+import { Transaction } from "@/domain/Transaction";
 import { ApiGateway } from "./ApiGateway";
 import axios, {AxiosInstance} from 'axios'
 
@@ -16,5 +17,10 @@ export class ApiGatewayAxios implements ApiGateway {
         'Content-Type': 'multipart/form-data'
       }
     })
+  }
+
+  async getTransactions(): Promise<Transaction[]> {
+    const response = await this.axios.get('/transactions')
+    return response.data
   }
 }

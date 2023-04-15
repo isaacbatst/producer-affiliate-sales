@@ -1,16 +1,16 @@
 import { Injectable, PipeTransform } from '@nestjs/common';
-import { TransactionDto } from './transactions.dto';
+import { CreateTransactionDto } from './transactions.dto';
 
 @Injectable()
 export class FileToTransactionsPipe
-  implements PipeTransform<Express.Multer.File, TransactionDto[]>
+  implements PipeTransform<Express.Multer.File, CreateTransactionDto[]>
 {
-  transform(file: Express.Multer.File): TransactionDto[] {
+  transform(file: Express.Multer.File): CreateTransactionDto[] {
     const text = file.buffer.toString('utf8');
     const lines = text.split('\n');
     return lines
       .filter((line) => line.length > 0)
-      .map<TransactionDto>((line) => ({
+      .map<CreateTransactionDto>((line) => ({
         type: Number(line.slice(0, 1)),
         date: line.slice(1, 26),
         product: line.slice(26, 56).trim(),
