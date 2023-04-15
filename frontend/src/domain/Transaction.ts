@@ -4,5 +4,8 @@ export interface Transaction {
   date: string;
   product: string;
   value: number;
-  sellerName: string;
+  seller: {
+    id: string;
+    name: string;
+  }
 }

@@ -6,7 +6,19 @@ export class ApiGatewayFake implements ApiGateway {
     return Promise.resolve();
   }
 
-  getTransactions(): Promise<Transaction[]> {
-    return Promise.resolve([]);
+  async getTransactions(): Promise<Transaction[]> {
+    return [
+      {
+        id: "1",
+        type: 1,
+        date: "2022-12-01",
+        product: "Product 1",
+        value: 100,
+        seller: {
+          id: "1",
+          name: "Seller 1",
+        },
+      }
+    ]
   }
 }
