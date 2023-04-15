@@ -39,4 +39,13 @@ describe('SellersController', () => {
     const sellers = await controller.getAll();
     expect(sellers).toHaveLength(1);
   });
+
+  it('should return a seller', async () => {
+    const seller = await controller.getById('id-1');
+    expect(seller).toEqual({
+      id: 'id-1',
+      name: 'name-1',
+      balance: 1000,
+    });
+  });
 });
