@@ -1,5 +1,5 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": ["eslint:recommended", "next/core-web-vitals"],
   "rules": {
     "react/jsx-indent": [
       "error",
@@ -9,6 +9,7 @@
         "indentLogicalExpressions": true
       }
     ],
-    "react/jsx-indent-props": ["error", 2]
+    "react/jsx-indent-props": ["error", 2],
+    "indent": ["error", 2]
   }
 }
