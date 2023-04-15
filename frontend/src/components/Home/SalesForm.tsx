@@ -29,16 +29,18 @@ const SalesForm: React.FC<Props> = ({ apiGateway }: Props) => {
   }
 
   return (
-    <div className='flex flex-col justify-center items-center py-10'>
+    <div className='flex flex-col justify-center items-center py-10 bg-white'>
       <form onSubmit={onSubmit} role='form' className='flex flex-col items-center'>
-        <div className="flex flex-col">
-          <label htmlFor={salesInputId} className='text-center'>Arquivo de Vendas</label>
-          <input type='file' name='sales' id={salesInputId} accept='.txt' />
+        <div className="flex flex-col items-center mb-4">
+          <label htmlFor={salesInputId} className='text-center mb-8 text-5xl font-semibold'>
+            Registre suas vendas aqui
+          </label>
+          <input type='file' name='sales' id={salesInputId} accept='.txt' className='mb-4' />
         </div>
         <button 
           type='submit'  
-          className='bg-theme-yellow-500 py-3 w-full font-medium 
-            rounded-sm hover:bg-theme-yellow-600 transition-colors'>
+          className='bg-theme-yellow-500 border border-slate-900 py-3 w-full font-semibold   
+            rounded-lg hover:bg-theme-yellow-600 transition-colors'>
           Enviar
         </button>
       </form>
