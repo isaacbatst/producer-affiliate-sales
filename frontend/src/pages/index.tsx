@@ -1,6 +1,6 @@
 import Header from '@/components/Header'
 import SalesForm from '@/components/Home/SalesForm'
-import { ApiGatewayFake } from '@/gateways/ApiGatewayFake'
+import { ApiGatewayFake } from '@/infra/gateways/ApiGatewayFake'
 import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })

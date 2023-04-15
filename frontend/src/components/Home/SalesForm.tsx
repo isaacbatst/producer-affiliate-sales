@@ -1,4 +1,4 @@
-import { ApiGateway } from '@/gateways/ApiGateway'
+import { ApiGateway } from '@/infra/gateways/ApiGateway'
 import React, { FormEvent, useState } from 'react'
 
 const salesInputId = 'sales-input'
