@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { SellersRepository } from './sellers.repository';
 import { Seller } from 'src/domain/Seller/Seller';
 import { SellerDto } from './sellers.dto';
@@ -21,5 +21,15 @@ export class SellersService {
   async getAll(): Promise<SellerDto[]> {
     const sellers = await this.sellersRepository.getAll();
     return sellers.map(SellersService.toDto);
+  }
+
+  async getById(id: string): Promise<SellerDto> {
+    const seller = await this.sellersRepository.getById(id);
+
+    if (!seller) {
+      throw new NotFoundException('Seller not found');
+    }
+
+    return SellersService.toDto(seller);
   }
 }

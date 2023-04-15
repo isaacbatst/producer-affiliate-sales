@@ -7,6 +7,11 @@ export class SellersRepositoryMemory implements SellersRepository {
   async getAll(): Promise<Seller[]> {
     return this.sellers;
   }
+
+  async getById(id: string): Promise<Seller | undefined> {
+    return this.sellers.find((seller) => seller.getId() === id);
+  }
+
   async getByNames(names: string[]): Promise<Seller[]> {
     return this.sellers.filter((seller) => names.includes(seller.getName()));
   }

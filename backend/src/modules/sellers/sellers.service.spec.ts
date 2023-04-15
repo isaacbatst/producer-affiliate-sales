@@ -32,4 +32,9 @@ describe('SellersService', () => {
     const transactions = await service.getAll();
     expect(transactions).toHaveLength(1);
   });
+
+  it('should return seller', async () => {
+    const seller = await service.getById('id-1');
+    expect(seller).toBeDefined();
+  });
 });
