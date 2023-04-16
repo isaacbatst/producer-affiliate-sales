@@ -47,9 +47,9 @@ describe('Product', () => {
       balance: 0,
     });
     product.addAffiliate(affiliate);
-    expect(() => {
-      product.addAffiliate(affiliate);
-    }).toThrowError();
+    product.addAffiliate(affiliate);
+
+    expect(product.getAffiliates()).toHaveLength(1);
   });
 
   it('should not add creator as affiliate', () => {

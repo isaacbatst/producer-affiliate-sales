@@ -5,6 +5,7 @@ import { SellersRepositoryMemory } from '../sellers/sellers.repository.memory';
 import { TransactionsController } from './transactions.controller';
 import { TransactionsService } from './transactions.service';
 import { getSalesFileMock } from './transactions.mock';
+import { ProductsRepositoryMemory } from '../products/products.repository.memory';
 
 describe('TransactionsController', () => {
   let controller: TransactionsController;
@@ -23,6 +24,10 @@ describe('TransactionsController', () => {
         {
           provide: 'SELLERS_REPOSITORY',
           useValue: sellersRepository,
+        },
+        {
+          provide: 'PRODUCTS_REPOSITORY',
+          useValue: new ProductsRepositoryMemory(),
         },
         {
           provide: 'ID_GENERATOR',

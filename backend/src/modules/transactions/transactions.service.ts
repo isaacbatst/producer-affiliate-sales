@@ -1,10 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { SellerType } from '../../domain/Seller/SellerType';
+import { Transaction } from '../../domain/Transaction/Transaction';
 import { TransactionsListFactory } from '../../domain/Transaction/TransactionListFactory';
 import { IdGenerator } from '../../infra/common/IdGenerator/IdGenerator';
+import { ProductsRepository } from '../products/products.repository';
 import { SellersRepository } from '../sellers/sellers.repository';
-import { TransactionsRepository } from './transactions.repository';
 import { CreateTransactionDto, TransactionDto } from './transactions.dto';
-import { Transaction } from 'src/domain/Transaction/Transaction';
+import { TransactionsRepository } from './transactions.repository';
 
 @Injectable()
 export class TransactionsService {
@@ -12,7 +14,7 @@ export class TransactionsService {
     return {
       type: transaction.getType(),
       date: transaction.getDate().toISOString(),
-      product: transaction.getProduct(),
+      product: transaction.getProduct().getName(),
       value: transaction.getValue(),
       seller: {
         id: transaction.getSeller().getId(),
@@ -27,31 +29,42 @@ export class TransactionsService {
     private readonly transactionsRepository: TransactionsRepository,
     @Inject('SELLERS_REPOSITORY')
     private readonly sellersRepository: SellersRepository,
+    @Inject('PRODUCTS_REPOSITORY')
+    private readonly productsRepository: ProductsRepository,
     @Inject('ID_GENERATOR')
     private readonly idGenerator: IdGenerator,
   ) {}
 
   async processTransactions(inputs: CreateTransactionDto[]) {
-    const sellersNames = inputs.map((input) => input.sellerName);
-    const registeredSellers = await this.sellersRepository.getByNames(
-      sellersNames,
-    );
+    const registeredSellers = await this.getRegisteredSellers(inputs);
+    const registeredProducts = await this.getRegisteredProducts(inputs);
     const transactionsListFactory = new TransactionsListFactory(
       this.idGenerator,
-    );
-    const transactions = await transactionsListFactory.create(
-      inputs,
       registeredSellers,
+      registeredProducts,
     );
-
-    const unregisteredSellers =
-      transactionsListFactory.getUnregisteredSellers();
+    const {
+      transactions,
+      unregistered: {
+        products: unregisteredProducts,
+        sellers: unregisteredSellers,
+      },
+    } = await transactionsListFactory.create(inputs);
 
     transactions.forEach((transaction) => {
       transaction.apply();
+
+      const isAffiliateTransaction =
+        transaction.getSellerType() === SellerType.AFFILIATE;
+      if (isAffiliateTransaction) {
+        const product = transaction.getProduct();
+        const seller = transaction.getSeller();
+        product.addAffiliate(seller);
+      }
     });
 
     await Promise.all([
+      this.productsRepository.createMany(unregisteredProducts),
       this.sellersRepository.createMany(unregisteredSellers),
       this.sellersRepository.updateMany(registeredSellers),
       this.transactionsRepository.createMany(transactions),
@@ -61,5 +74,15 @@ export class TransactionsService {
   async getAll(): Promise<TransactionDto[]> {
     const transactions = await this.transactionsRepository.getAll();
     return transactions.map(TransactionsService.toDto);
+  }
+
+  private getRegisteredSellers(inputs: CreateTransactionDto[]) {
+    const sellersNames = inputs.map((input) => input.sellerName);
+    return this.sellersRepository.getByNames(sellersNames);
+  }
+
+  private getRegisteredProducts(inputs: CreateTransactionDto[]) {
+    const productsNames = inputs.map((input) => input.product);
+    return this.productsRepository.getByNames(productsNames);
   }
 }

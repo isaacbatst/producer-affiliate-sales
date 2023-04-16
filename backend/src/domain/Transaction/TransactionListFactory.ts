@@ -1,7 +1,15 @@
 import { IdGenerator } from 'src/infra/common/IdGenerator/IdGenerator';
+import { Product } from '../Product/Product';
 import { Seller } from '../Seller/Seller';
 import { Transaction } from './Transaction';
 import { TransactionFactory } from './TransactionFactory';
+import { TransactionFactoryAffiliateSell } from './TransactionFactoryAffiliateSell';
+import { TransactionFactoryCommissionPayment } from './TransactionFactoryCommissionPayment';
+import { TransactionFactoryCommissionReceivement } from './TransactionFactoryCommissionReceivement';
+import { TransactionFactoryCreatorSell } from './TransactionFactoryCreatorSell';
+import { TransactionRelatedRetriever } from './TransactionListRelatedFactory';
+import { TransactionRelatedFactoryProduct } from './TransactionListRelatedFactoryProduct';
+import { TransactionRelatedFactorySeller } from './TransactionListRelatedFactorySeller';
 
 type Input = {
   type: number;
@@ -12,80 +20,78 @@ type Input = {
 };
 
 export class TransactionsListFactory {
-  private unregisteredSellers: Seller[] = [];
+  private sellerRetriever: TransactionRelatedRetriever<Seller>;
+  private productRetriever: TransactionRelatedRetriever<Product>;
+  private transactionFactories: TransactionFactory[] = [
+    new TransactionFactoryCreatorSell(),
+    new TransactionFactoryAffiliateSell(),
+    new TransactionFactoryCommissionPayment(),
+    new TransactionFactoryCommissionReceivement(),
+  ];
 
-  constructor(private readonly idGenerator: IdGenerator) {}
-
-  public async create(
-    inputs: Input[],
+  constructor(
+    private readonly idGenerator: IdGenerator,
     registeredSellers: Seller[],
-  ): Promise<Transaction[]> {
+    registeredProducts: Product[],
+  ) {
+    this.sellerRetriever = new TransactionRelatedRetriever(
+      this.idGenerator,
+      registeredSellers,
+    );
+    this.productRetriever = new TransactionRelatedRetriever(
+      this.idGenerator,
+      registeredProducts,
+    );
+  }
+
+  public async create(inputs: Input[]): Promise<{
+    transactions: Transaction[];
+    unregistered: {
+      sellers: Seller[];
+      products: Product[];
+    };
+  }> {
     const transactions: Transaction[] = [];
 
     for (const input of inputs) {
-      const seller = await this.getSeller(input.sellerName, registeredSellers);
-      const transaction = await this.createTransaction(input, seller);
+      const sellerFactory = new TransactionRelatedFactorySeller();
+      const seller = await this.sellerRetriever.findOrCreate(
+        input.sellerName,
+        sellerFactory,
+      );
+      const productFactory = new TransactionRelatedFactoryProduct(
+        seller,
+        input.value,
+        input.type,
+      );
+      const product = await this.productRetriever.findOrCreate(
+        input.product,
+        productFactory,
+      );
+      const transactionFactory = this.transactionFactories.find((factory) =>
+        factory.shouldCreate(input.type),
+      );
+      if (!transactionFactory) {
+        throw new Error('Creating transaction from invalid transaction type');
+      }
+      const transaction = transactionFactory.create({
+        date: new Date(input.date),
+        product,
+        seller,
+        id: await this.idGenerator.generate(),
+        value: input.value,
+        type: input.type,
+      });
+
       transactions.push(transaction);
     }
 
-    return transactions;
-  }
-
-  public getUnregisteredSellers(): Seller[] {
-    return this.unregisteredSellers;
-  }
-
-  private async createTransaction(
-    input: Input,
-    seller: Seller,
-  ): Promise<Transaction> {
-    const transactionId = await this.idGenerator.generate();
-
-    return TransactionFactory.create({
-      ...input,
-      id: transactionId,
-      seller,
-      date: new Date(input.date),
-    });
-  }
-
-  private async getSeller(
-    sellerName: string,
-    registeredSellers: Seller[],
-  ): Promise<Seller> {
-    const registeredSeller = registeredSellers.find(
-      (seller) => seller.getName() === sellerName,
-    );
-    if (!registeredSeller) {
-      return this.getUnregisteredSeller(sellerName);
-    }
-
-    return registeredSeller;
-  }
-
-  private async getUnregisteredSeller(sellerName: string): Promise<Seller> {
-    const unregisteredSeller = this.unregisteredSellers.find(
-      (seller) => seller.getName() === sellerName,
-    );
-
-    if (!unregisteredSeller) {
-      return this.createAndPushUnregisteredSeller(sellerName);
-    }
-
-    return unregisteredSeller;
-  }
-
-  private async createAndPushUnregisteredSeller(
-    sellerName: string,
-  ): Promise<Seller> {
-    const sellerId = await this.idGenerator.generate();
-    const seller = new Seller({
-      id: sellerId,
-      name: sellerName,
-      balance: 0,
-    });
-    this.unregisteredSellers.push(seller);
-
-    return seller;
+    return {
+      transactions,
+      unregistered: {
+        sellers: this.sellerRetriever.getUnregisteredList(),
+        products: this.productRetriever.getUnregisteredList(),
+      },
+    };
   }
 }

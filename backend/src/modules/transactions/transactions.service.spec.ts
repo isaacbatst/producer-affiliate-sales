@@ -4,11 +4,14 @@ import { TransactionsRepositoryMemory } from '../../infra/repositories/Transacti
 import { SellersRepositoryMemory } from '../sellers/sellers.repository.memory';
 import { IdGeneratorFake } from '../../infra/common/IdGenerator/IdGeneratorFake';
 import { getTransactionsMock } from './transactions.mock';
+import { ProductsRepositoryMemory } from '../products/products.repository.memory';
 
 describe('TransactionsService', () => {
   let service: TransactionsService;
   const transactionsRepository = new TransactionsRepositoryMemory();
   const sellersRepository = new SellersRepositoryMemory();
+  const productsRepository = new ProductsRepositoryMemory();
+  const idGenerator = new IdGeneratorFake();
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -23,8 +26,12 @@ describe('TransactionsService', () => {
           useValue: sellersRepository,
         },
         {
+          provide: 'PRODUCTS_REPOSITORY',
+          useValue: productsRepository,
+        },
+        {
           provide: 'ID_GENERATOR',
-          useValue: new IdGeneratorFake(),
+          useValue: idGenerator,
         },
       ],
     }).compile();

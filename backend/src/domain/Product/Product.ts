@@ -1,10 +1,12 @@
 import { Seller } from '../Seller/Seller';
+import { Transaction } from '../Transaction/Transaction';
 
 type ProductParams = {
   id: string;
   name: string;
   price: number;
   creator: Seller;
+  transactions?: Transaction[];
 };
 
 export class Product {
@@ -27,7 +29,7 @@ export class Product {
     );
 
     if (found) {
-      throw new Error('Repeated affiliate');
+      return;
     }
 
     if (seller.getId() === this.creator.getId()) {
