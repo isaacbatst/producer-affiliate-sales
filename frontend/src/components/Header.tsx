@@ -1,11 +1,12 @@
+import Link from 'next/link'
 import React from 'react'
 
-type Props = {}
-
-const Header: React.FC = (props: Props) => {
+const Header: React.FC = () => {
   return (
     <header className='py-3 px-5 bg-slate-900'>
-      <h1 className='text-2xl font-bold text-white'>Criadores e Afiliados</h1>
+      <Link href='/'>
+        <h1 className='text-2xl font-bold text-white'>Criadores e Afiliados</h1>
+      </Link>
     </header>
   )
 }
