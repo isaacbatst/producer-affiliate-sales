@@ -12,10 +12,7 @@ export class TransactionRelatedFactoryProduct
     private transactionType: TransactionType,
   ) {}
   create(id: string, name: string): Product {
-    if (
-      this.transactionType === TransactionType.CREATOR_SELL ||
-      this.transactionType === TransactionType.COMMISION_RECEIVEMENT
-    ) {
+    if (this.transactionType === TransactionType.CREATOR_SELL) {
       return new Product({
         creator: this.seller,
         price: this.price,
@@ -24,6 +21,6 @@ export class TransactionRelatedFactoryProduct
       });
     }
 
-    throw new Error('Products must be created from creator transactions');
+    throw new Error('First product transaction must be a creator sell');
   }
 }

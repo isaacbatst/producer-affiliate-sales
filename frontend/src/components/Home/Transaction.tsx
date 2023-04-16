@@ -23,7 +23,7 @@ const Transaction = ({transaction}: Props) => {
         </Link>
       </p>
       <p className='text-sm'><strong className='text-base'>Valor:</strong> {value.print()}</p>
-      <p className='text-sm'><strong className='text-base'>Produto:</strong> {transaction.product}</p>
+      <p className='text-sm'><strong className='text-base'>Produto:</strong> {transaction.product.name}</p>
       <p className='text-sm'><strong className='text-base'>Tipo:</strong> {type.print()}</p>
       <p className='text-sm'><strong className='text-base'>Data:</strong> {new Date(transaction.date).toLocaleString()}</p>
     </li>
