@@ -17,7 +17,9 @@ const TransactionsList = ({apiGateway}: Props) => {
         {transactions && <ul className='grid grid-cols-1 md:grid-cols-3 gap-4' aria-labelledby='transactions-list-title'>
           {transactions?.map(transaction => <Transaction transaction={transaction} key={transaction.id} />)}
         </ul>}
-        {!isLoading && transactions?.length === 0 && <p>Nenhuma transação encontrada</p>}
+        {(!isLoading && !transactions) || transactions?.length === 0 && (
+          <p className='text-white'>Nenhuma transação encontrada</p>
+        )}
       </div>
     </section>
   )

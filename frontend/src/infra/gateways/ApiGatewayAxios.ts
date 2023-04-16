@@ -1,4 +1,4 @@
-import { TransactionDto } from "@/domain/Transaction";
+import { TransactionDto } from "@/domain/TransactionDto";
 import { ApiGateway } from "./ApiGateway";
 import axios, {AxiosInstance} from 'axios'
 import { Seller } from "@/domain/Seller";
