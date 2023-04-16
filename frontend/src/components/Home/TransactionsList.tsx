@@ -18,7 +18,7 @@ const TransactionsList = ({apiGateway}: Props) => {
           {transactions?.map(transaction => <Transaction transaction={transaction} key={transaction.id} />)}
         </ul>}
         {(!isLoading && !transactions) || transactions?.length === 0 && (
-          <p className='text-white'>Nenhuma transação encontrada</p>
+          <p className='text-white font-light'>Nenhuma transação encontrada</p>
         )}
       </div>
     </section>
