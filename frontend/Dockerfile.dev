@@ -1,0 +1,19 @@
+FROM node:18-alpine AS base
+
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn --frozen-lockfile
+
+FROM base AS runner
+WORKDIR /app
+ENV NODE_ENV development
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+EXPOSE 3001
+ENV PORT 3001
+ARG API_URL
+ENV API_URL=$API_URL
+ENTRYPOINT ["yarn"]
+CMD ["dev"]

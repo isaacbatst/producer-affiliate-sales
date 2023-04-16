@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    command: start:dev
+    ports:
+      - 3000:3000
+    volumes:
+      - ./backend:/app
+  frontend:
+    env_file: ./frontend/.env
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+      args: 
+        API_URL:
+    ports:
+      - 3001:3001
+    volumes:
+      - ./frontend:/app
