@@ -1,6 +1,8 @@
-import { Transaction } from "@/domain/Transaction";
+import { Seller } from "@/domain/Seller";
+import { TransactionDto } from "@/domain/Transaction";
 
 export interface ApiGateway {
   processTransactions(transactionsFile: File): Promise<void>;
-  getTransactions(): Promise<Transaction[]>
+  getTransactions(): Promise<TransactionDto[]>
+  getSeller(id: string): Promise<Seller>
 }

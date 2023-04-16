@@ -1,12 +1,13 @@
-import { Transaction } from "@/domain/Transaction";
+import { TransactionDto } from "@/domain/TransactionDto";
 import { ApiGateway } from "./ApiGateway";
+import { Seller } from "@/domain/Seller";
 
 export class ApiGatewayFake implements ApiGateway {
   processTransactions(): Promise<void> {
     return Promise.resolve();
   }
 
-  async getTransactions(): Promise<Transaction[]> {
+  async getTransactions(): Promise<TransactionDto[]> {
     return [
       {
         id: "1",
@@ -20,5 +21,13 @@ export class ApiGatewayFake implements ApiGateway {
         },
       }
     ]
+  }
+
+  async getSeller(): Promise<Seller> {
+    return {
+      id: "1",
+      name: "Seller 1",
+      balance: 100,
+    }
   }
 }

@@ -1,6 +1,7 @@
-import { Transaction } from "@/domain/Transaction";
+import { TransactionDto } from "@/domain/Transaction";
 import { ApiGateway } from "./ApiGateway";
 import axios, {AxiosInstance} from 'axios'
+import { Seller } from "@/domain/Seller";
 
 export class ApiGatewayAxios implements ApiGateway {
   private axios: AxiosInstance;
@@ -19,8 +20,13 @@ export class ApiGatewayAxios implements ApiGateway {
     })
   }
 
-  async getTransactions(): Promise<Transaction[]> {
+  async getTransactions(): Promise<TransactionDto[]> {
     const response = await this.axios.get('/transactions')
+    return response.data
+  }
+
+  async getSeller(id: string): Promise<Seller> {
+    const response = await this.axios.get(`/sellers/${id}`)
     return response.data
   }
 }

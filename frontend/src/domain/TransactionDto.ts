@@ -1,4 +1,4 @@
-export interface Transaction {
+export interface TransactionDto {
   id: string;
   type: number;
   date: string;
