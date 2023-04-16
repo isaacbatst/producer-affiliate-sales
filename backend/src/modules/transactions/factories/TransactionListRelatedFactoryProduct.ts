@@ -1,7 +1,7 @@
-import { Product } from '../Product/Product';
-import { Seller } from '../Seller/Seller';
+import { Product } from '../../../domain/Product/Product';
+import { Seller } from '../../../domain/Seller/Seller';
 import { TransactionRelatedFactory } from './TransactionListRelatedFactory';
-import { TransactionType } from './TransactionType';
+import { TransactionType } from '../../../domain/Transaction/TransactionType';
 
 export class TransactionRelatedFactoryProduct
   implements TransactionRelatedFactory<Product>

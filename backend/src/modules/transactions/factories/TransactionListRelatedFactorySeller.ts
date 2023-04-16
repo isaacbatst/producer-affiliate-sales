@@ -1,4 +1,4 @@
-import { Seller } from '../Seller/Seller';
+import { Seller } from '../../../domain/Seller/Seller';
 import { TransactionRelatedFactory } from './TransactionListRelatedFactory';
 
 export class TransactionRelatedFactorySeller

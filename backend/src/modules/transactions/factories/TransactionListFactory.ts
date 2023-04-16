@@ -1,12 +1,12 @@
 import { IdGenerator } from 'src/infra/common/IdGenerator/IdGenerator';
-import { Product } from '../Product/Product';
-import { Seller } from '../Seller/Seller';
-import { Transaction } from './Transaction';
-import { TransactionFactory } from './TransactionFactory';
-import { TransactionFactoryAffiliateSell } from './TransactionFactoryAffiliateSell';
-import { TransactionFactoryCommissionPayment } from './TransactionFactoryCommissionPayment';
-import { TransactionFactoryCommissionReceivement } from './TransactionFactoryCommissionReceivement';
-import { TransactionFactoryCreatorSell } from './TransactionFactoryCreatorSell';
+import { Product } from '../../../domain/Product/Product';
+import { Seller } from '../../../domain/Seller/Seller';
+import { Transaction } from '../../../domain/Transaction/Transaction';
+import { TransactionFactory } from '../../../domain/Transaction/TransactionFactory';
+import { TransactionFactoryAffiliateSell } from '../../../domain/Transaction/TransactionFactoryAffiliateSell';
+import { TransactionFactoryCommissionPayment } from '../../../domain/Transaction/TransactionFactoryCommissionPayment';
+import { TransactionFactoryCommissionReceivement } from '../../../domain/Transaction/TransactionFactoryCommissionReceivement';
+import { TransactionFactoryCreatorSell } from '../../../domain/Transaction/TransactionFactoryCreatorSell';
 import { TransactionRelatedRetriever } from './TransactionListRelatedFactory';
 import { TransactionRelatedFactoryProduct } from './TransactionListRelatedFactoryProduct';
 import { TransactionRelatedFactorySeller } from './TransactionListRelatedFactorySeller';
@@ -44,7 +44,7 @@ export class TransactionsListFactory {
     );
   }
 
-  public async create(inputs: Input[]): Promise<{
+  public async createBatch(inputs: Input[]): Promise<{
     transactions: Transaction[];
     unregistered: {
       sellers: Seller[];

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { SellerType } from '../../domain/Seller/SellerType';
 import { Transaction } from '../../domain/Transaction/Transaction';
-import { TransactionsListFactory } from '../../domain/Transaction/TransactionListFactory';
+import { TransactionsListFactory } from './factories/TransactionListFactory';
 import { IdGenerator } from '../../infra/common/IdGenerator/IdGenerator';
 import { ProductsRepository } from '../products/products.repository';
 import { SellersRepository } from '../sellers/sellers.repository';
@@ -49,7 +49,7 @@ export class TransactionsService {
         products: unregisteredProducts,
         sellers: unregisteredSellers,
       },
-    } = await transactionsListFactory.create(inputs);
+    } = await transactionsListFactory.createBatch(inputs);
 
     transactions.forEach((transaction) => {
       transaction.apply();

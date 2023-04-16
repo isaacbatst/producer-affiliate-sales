@@ -1,4 +1,4 @@
-import { IdGeneratorFake } from '../../infra/common/IdGenerator/IdGeneratorFake';
+import { IdGeneratorFake } from '../../../infra/common/IdGenerator/IdGeneratorFake';
 import { TransactionsListFactory } from './TransactionListFactory';
 
 const makeSut = () => {
@@ -34,7 +34,9 @@ const makeSut = () => {
 describe('TransactionListFactory', () => {
   it('should create transactions', async () => {
     const { inputs, transactionsListFactory } = makeSut();
-    const { transactions } = await transactionsListFactory.create(inputs);
+    const { transactions } = await transactionsListFactory.createBatch(
+      inputs,
+    );
     expect(transactions).toHaveLength(2);
     expect(transactions[0].getDate()).toEqual(new Date(inputs[0].date));
     expect(transactions[1].getDate()).toEqual(new Date(inputs[1].date));
@@ -42,14 +44,16 @@ describe('TransactionListFactory', () => {
 
   it('should create unregistered sellers', async () => {
     const { inputs, transactionsListFactory } = makeSut();
-    const { unregistered } = await transactionsListFactory.create([inputs[0]]);
+    const { unregistered } = await transactionsListFactory.createBatch([
+      inputs[0],
+    ]);
     expect(unregistered.sellers).toHaveLength(1);
     expect(unregistered.sellers[0].getName()).toBe('JOSE CARLOS');
   });
 
   it('should create unregistered sellers once', async () => {
     const { inputs, transactionsListFactory } = makeSut();
-    const { unregistered } = await transactionsListFactory.create([
+    const { unregistered } = await transactionsListFactory.createBatch([
       inputs[0],
       inputs[0],
     ]);
