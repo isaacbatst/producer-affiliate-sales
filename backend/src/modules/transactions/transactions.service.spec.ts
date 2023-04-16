@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TransactionsService } from './transactions.service';
-import { TransactionsRepositoryMemory } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryMemory';
-import { SellersRepositoryMemory } from '../sellers/sellers.repository.memory';
 import { IdGeneratorFake } from '../../infra/common/IdGenerator/IdGeneratorFake';
-import { getTransactionsMock } from './transactions.mock';
+import { TransactionsRepositoryMemory } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryMemory';
 import { ProductsRepositoryMemory } from '../products/products.repository.memory';
+import { SellersRepositoryMemory } from '../sellers/sellers.repository.memory';
+import { getTransactionsMock } from './transactions.mock';
+import { TransactionsService } from './transactions.service';
 
 describe('TransactionsService', () => {
   let service: TransactionsService;
@@ -49,22 +49,30 @@ describe('TransactionsService', () => {
     await service.processTransactions(getTransactionsMock());
 
     expect(transactionsRepository.transactions).toHaveLength(20);
-    expect(sellersRepository.sellers).toHaveLength(7);
-  });
-
-  it('should update sellers balance', async () => {
-    await service.processTransactions(getTransactionsMock());
-    const seller = sellersRepository.sellers.find(
-      (seller) => seller.getName() === 'JOSE CARLOS',
-    );
-
-    expect(seller).toBeDefined();
-    expect(seller?.getBalance()).toBe(21000);
   });
 
   it('should return all transactions', async () => {
     await service.processTransactions(getTransactionsMock());
     const transactions = await service.getAll();
     expect(transactions).toHaveLength(20);
+  });
+
+  it('should create products', async () => {
+    await service.processTransactions(getTransactionsMock());
+    const productIds = transactionsRepository.transactions.map((transaction) =>
+      transaction.getProduct().getId(),
+    );
+    const uniqueIds = [...new Set(productIds)];
+
+    expect(uniqueIds).toHaveLength(3);
+  });
+
+  it('should create sellers', async () => {
+    await service.processTransactions(getTransactionsMock());
+    const sellerIds = transactionsRepository.transactions.map((transaction) =>
+      transaction.getSeller().getId(),
+    );
+    const uniqueIds = [...new Set(sellerIds)];
+    expect(uniqueIds).toHaveLength(7);
   });
 });

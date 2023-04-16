@@ -43,19 +43,12 @@ export class TransactionsService {
       registeredSellers,
       registeredProducts,
     );
-    const {
-      transactions,
-      unregistered: {
-        products: unregisteredProducts,
-        sellers: unregisteredSellers,
-      },
-    } = await transactionsListFactory.createBatch(inputs);
+    const { transactions } = await transactionsListFactory.createBatch(inputs);
 
     transactions.forEach((transaction) => {
       transaction.apply();
-
-      const isAffiliateTransaction =
-        transaction.getSellerType() === SellerType.AFFILIATE;
+      const sellerType = transaction.getSellerType();
+      const isAffiliateTransaction = sellerType === SellerType.AFFILIATE;
       if (isAffiliateTransaction) {
         const product = transaction.getProduct();
         const seller = transaction.getSeller();
@@ -64,8 +57,6 @@ export class TransactionsService {
     });
 
     await Promise.all([
-      this.productsRepository.createMany(unregisteredProducts),
-      this.sellersRepository.createMany(unregisteredSellers),
       this.sellersRepository.updateMany(registeredSellers),
       this.transactionsRepository.createMany(transactions),
     ]);

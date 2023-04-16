@@ -49,7 +49,6 @@ describe('TransactionsController', () => {
     const file = await getSalesFileMock();
     await controller.processTransactions(file);
     expect(transactionsRepository.transactions).toHaveLength(20);
-    expect(sellersRepository.sellers).toHaveLength(7);
   });
 
   it('should return all transactions', async () => {
