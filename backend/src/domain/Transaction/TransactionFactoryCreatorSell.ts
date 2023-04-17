@@ -6,7 +6,9 @@ import {
 } from './TransactionFactory';
 import { TransactionType } from './TransactionType';
 
-export class TransactionFactoryCreatorSell implements TransactionFactoryHandler {
+export class TransactionFactoryCreatorSell
+  implements TransactionFactoryHandler
+{
   shouldCreate(type: TransactionType): boolean {
     return type === TransactionType.CREATOR_SELL;
   }
