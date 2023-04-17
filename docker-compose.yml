@@ -10,6 +10,8 @@ services:
     build: ./backend
     ports:
       - 3000:3000
+    depends_on:
+      - database
   frontend:
     env_file: ./frontend/.env
     build: 
