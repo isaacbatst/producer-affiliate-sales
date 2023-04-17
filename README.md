@@ -2,7 +2,7 @@
 
 ## Context
 
-This platform works with creator-affiliate structure, in which a creator sells his products and can have affiliates that also sells the products, as long as they pay a commission.
+This platform works with creator-affiliate structure, in which a creator sells his products and can have affiliates that also sells the products receiving a commission.
 
 A transactions is a buy/sell contract. Each transaction changes the creator/affiliate balance.
 

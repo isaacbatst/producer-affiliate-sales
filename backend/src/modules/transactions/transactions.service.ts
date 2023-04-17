@@ -32,7 +32,6 @@ export class TransactionsService {
     const { transactions } = await transactionsListFactory.createBatch(inputs);
 
     transactions.forEach((transaction) => {
-      transaction.apply();
       const sellerType = transaction.getSellerType();
       const isAffiliateTransaction = sellerType === SellerType.AFFILIATE;
       if (isAffiliateTransaction) {
@@ -40,6 +39,7 @@ export class TransactionsService {
         const seller = transaction.getSeller();
         product.addAffiliate(seller);
       }
+      transaction.apply();
     });
 
     await Promise.all([

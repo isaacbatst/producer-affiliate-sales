@@ -1,6 +1,6 @@
-import TransactionsList from '@/components/Home/TransactionsList'
 import Header from '@/components/common/Header'
 import ItemSection from '@/components/common/ItemSection'
+import TransactionsList from '@/components/common/TransactionsList/TransactionsList'
 import { Money } from '@/domain/Money'
 import { useSeller } from '@/hooks/useSeller'
 import { useSellerTransactions } from '@/hooks/useSellerTransactions'
@@ -33,7 +33,7 @@ const SellerPage: NextPage = () => {
           <p className='text-sm lg:text-xl text-center font-light'>Vendedor não encontrado</p>
         )}
       </ItemSection>
-      <TransactionsList isLoading={isLoadingTransactions} transactions={transactions} />
+      <TransactionsList isLoading={isLoadingTransactions} transactions={transactions} indicateOperation />
     </main>
   )
 }

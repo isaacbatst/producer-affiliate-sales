@@ -13,6 +13,13 @@ export class TransactionType {
     [TransactionTypeEnum.COMMISION_RECEIVEMENT]: 'Recebimento de comissão',
   }
 
+  private static readonly signalMap: Record<TransactionTypeEnum, string> = {
+    [TransactionTypeEnum.CREATOR_SELL]: '+',
+    [TransactionTypeEnum.AFFILIATE_SELL]: '+',
+    [TransactionTypeEnum.COMMISSION_PAYMENT]: '-',
+    [TransactionTypeEnum.COMMISION_RECEIVEMENT]: '+',
+  }
+
   readonly type: TransactionTypeEnum
 
   constructor(type: number) {
@@ -25,5 +32,9 @@ export class TransactionType {
 
   print() {
     return TransactionType.printMap[this.type]
+  }
+
+  signal() {
+    return TransactionType.signalMap[this.type]
   }
 }

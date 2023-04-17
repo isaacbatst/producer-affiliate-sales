@@ -146,11 +146,33 @@ export class TransactionsRepositoryPrisma implements TransactionsRepository {
     return transaction.map(TransactionsRepositoryPrisma.toDomain);
   }
   async getBySeller(id: string): Promise<Transaction[]> {
-    const transactions = await this.prisma.transaction.findMany({
+    const products = await this.prisma.product.findMany({
       where: {
-        seller: {
+        creator: {
           id,
         },
+      },
+    });
+    const transactions = await this.prisma.transaction.findMany({
+      where: {
+        OR: [
+          {
+            seller: {
+              id,
+            },
+            type: {
+              not: PrismaTransactionType.AFFILIATE_SELL,
+            },
+          },
+          {
+            product: {
+              id: {
+                in: products.map((product) => product.id),
+              },
+            },
+            type: PrismaTransactionType.AFFILIATE_SELL,
+          },
+        ],
       },
       include: {
         product: true,

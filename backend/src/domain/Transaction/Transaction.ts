@@ -1,7 +1,6 @@
 import { Product } from '../Product/Product';
 import { Seller } from '../Seller/Seller';
 import { SellerType } from '../Seller/SellerType';
-import { TransactionOperation } from './TransactionOperation';
 import { TransactionType } from './TransactionType';
 
 export type TransactionParams = {
@@ -17,7 +16,6 @@ export abstract class Transaction {
   private readonly id: string;
   private readonly date: Date;
   private readonly value: number;
-  private readonly operation: TransactionOperation;
   protected readonly product: Product;
   protected readonly type: TransactionType;
   protected readonly seller: Seller;
@@ -31,12 +29,9 @@ export abstract class Transaction {
     this.seller = params.seller;
     this.id = params.id;
     this.sellerType = this.makeSellerType();
-    this.operation = this.makeOperation();
   }
 
-  public apply() {
-    this.operation.apply(this.value, this.seller);
-  }
+  public abstract apply(): void;
 
   public getId(): string {
     return this.id;
@@ -66,6 +61,5 @@ export abstract class Transaction {
     return this.sellerType;
   }
 
-  protected abstract makeOperation(): TransactionOperation;
   protected abstract makeSellerType(): SellerType;
 }

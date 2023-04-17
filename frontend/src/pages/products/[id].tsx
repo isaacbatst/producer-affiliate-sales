@@ -1,11 +1,10 @@
-import TransactionsList from '@/components/Home/TransactionsList'
 import Header from '@/components/common/Header'
 import ItemSection from '@/components/common/ItemSection'
+import TransactionsList from '@/components/common/TransactionsList/TransactionsList'
 import { useProduct } from '@/hooks/useProduct'
 import { useProductTransactions } from '@/hooks/useProductTransactions'
 import { ApiGatewayFactory } from '@/infra/gateways/ApiGatewayFactory'
 import { useRouter } from 'next/router'
-import React from 'react'
 
 const ProductPage = () => {
   const router = useRouter()

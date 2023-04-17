@@ -1,6 +1,6 @@
 import Header from '@/components/common/Header'
+import TransactionsList from '@/components/common/TransactionsList/TransactionsList'
 import SalesForm from '@/components/Home/SalesForm'
-import TransactionsList from '@/components/Home/TransactionsList'
 import { useTransactions } from '@/hooks/useTransactions'
 import { ApiGatewayFactory } from '@/infra/gateways/ApiGatewayFactory'
 
