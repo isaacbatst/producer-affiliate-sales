@@ -19,11 +19,13 @@ A transactions is a buy/sell contract. Each transaction changes the creator/affi
 
 The environment variables must be set as described on `.env.example` files. 
 
-> Currently, only frontend folder needs it.
+- Frontend:
+  - **API_URL**: url to reach backend api.
+- Backend
+  - **DATABASE_URL**: url to reach postgres database.
+- Root:
+  - **POSTGRES_PASSWORD**: postgres password for docker database container.
 
-#### Frontend
-
-- **API_URL**: url to reach backend api.
 
 ### Docker
 
@@ -31,3 +33,17 @@ This project brings `docker-compose` files with production and development confi
 
 - **Production build**: `docker-compose up`
 - **Development build**:`docker compose -f docker-compose.dev.yml up`
+
+### Database
+
+You'll need to run database migrations manually:
+
+- Enter backend folder
+- Assure it's `.env` has proper `DATABASE_URL` configured.
+- Run migrations:
+
+```sh
+npx prisma migrate dev
+```
+
+> At production you'd use `migrate deploy`.
