@@ -1,4 +1,4 @@
-import Header from '@/components/Header'
+import Header from '@/components/common/Header'
 import { Money } from '@/domain/Money'
 import { useSeller } from '@/hooks/useSeller'
 import { ApiGatewayFactory } from '@/infra/gateways/ApiGatewayFactory'

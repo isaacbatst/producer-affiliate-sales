@@ -1,4 +1,4 @@
-import Header from '@/components/Header'
+import Header from '@/components/common/Header'
 import SalesForm from '@/components/Home/SalesForm'
 import TransactionsList from '@/components/Home/TransactionsList'
 import { ApiGatewayFactory } from '@/infra/gateways/ApiGatewayFactory'
