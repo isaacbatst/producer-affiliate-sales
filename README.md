@@ -22,7 +22,7 @@ The environment variables must be set as described on `.env.example` files.
 - Frontend:
   - **API_URL**: url to reach backend api.
 - Backend
-  - **DATABASE_URL**: url to reach postgres database.
+  - **DATABASE_URL**: url to reach postgres database. If you're using docker setup, the hostname is the database service name `database`.
 - Root:
   - **POSTGRES_PASSWORD**: postgres password for docker database container.
 
@@ -35,17 +35,3 @@ This project brings `docker-compose` files with production and development confi
 - **Development build**:`env API_PORT=3000 docker compose -f docker-compose.dev.yml up`
 
 > Note that if you don't set `API_PORT`, compose will publish the API into an ephemeral port.
-
-### Database
-
-You'll need to run database migrations manually:
-
-- Enter backend folder
-- Assure it's `.env` has proper `DATABASE_URL` configured.
-- Run migrations:
-
-```sh
-npx prisma migrate dev
-```
-
-> At production you'd use `migrate deploy`.
