@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -16,7 +17,7 @@ model Seller {
   balance            Int
   createdProducts    Product[]      @relation("creator")
   affiliatedProducts Product[]      @relation("affiliates")
-  transactions       Transactions[]
+  transactions       Transaction[]
 }
 
 model Product {
@@ -26,7 +27,7 @@ model Product {
   creator      Seller         @relation("creator", fields: [creatorId], references: [id])
   affiliates   Seller[]       @relation("affiliates")
   creatorId    String
-  transactions Transactions[]
+  transactions Transaction[]
 }
 
 enum TransactionType {
@@ -36,7 +37,7 @@ enum TransactionType {
   COMMISION_RECEIVEMENT
 }
 
-model Transactions {
+model Transaction {
   id        String          @id
   type      TransactionType
   date      DateTime

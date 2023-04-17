@@ -5,17 +5,30 @@ import { AppModule } from '../src/app.module';
 import { Constants } from '../src/common/constants';
 import * as path from 'path';
 import * as fs from 'fs/promises';
+import { PrismaService } from 'src/modules/prisma/prisma.service';
+
+const resetDatabase = async (app: INestApplication) => {
+  const prisma: PrismaService = app.get('PRISMA_SERVICE');
+  await prisma.transaction.deleteMany();
+  await prisma.product.deleteMany();
+  await prisma.seller.deleteMany();
+};
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
+    await resetDatabase(app);
+  });
+
+  afterAll(async () => {
+    await resetDatabase(app);
   });
 
   describe('Given empty datasource', () => {

@@ -1,4 +1,4 @@
-import { Product } from 'src/domain/Product/Product';
+import { Product } from '../../domain/Product/Product';
 import { ProductsRepository } from './products.repository';
 
 export class ProductsRepositoryMemory implements ProductsRepository {

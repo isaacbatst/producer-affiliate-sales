@@ -1,27 +1,28 @@
 import { Module } from '@nestjs/common';
-import { TransactionsRepositoryMemory } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryMemory';
-import { SellersRepositoryMemory } from '../sellers/sellers.repository.memory';
-import { ProductsRepositoryMemory } from '../products/products.repository.memory';
-
-const productsRepository = new ProductsRepositoryMemory();
-const sellersRepository = new SellersRepositoryMemory();
+import { ProductsRepositoryPrisma } from '../../infra/repositories/ProductsRepository/ProductsRepositoryPrisma';
+import { SellerRepositoryPrisma } from '../../infra/repositories/SellerRepository/SellerRepositoryPrisma';
+import { PrismaService } from '../prisma/prisma.service';
+import { TransactionsRepositoryPrisma } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryPrisma';
+import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
+  imports: [PrismaModule],
   providers: [
     {
+      provide: 'PRISMA_SERVICE',
+      useClass: PrismaService,
+    },
+    {
       provide: 'TRANSACTIONS_REPOSITORY',
-      useValue: new TransactionsRepositoryMemory(
-        productsRepository,
-        sellersRepository,
-      ),
+      useClass: TransactionsRepositoryPrisma,
     },
     {
       provide: 'SELLERS_REPOSITORY',
-      useValue: sellersRepository,
+      useClass: SellerRepositoryPrisma,
     },
     {
       provide: 'PRODUCTS_REPOSITORY',
-      useValue: productsRepository,
+      useClass: ProductsRepositoryPrisma,
     },
   ],
   exports: [

@@ -1,13 +1,13 @@
 import { Transaction } from './Transaction';
 import { TransactionCommissionReceivement } from './TransactionCommissionReceivement';
 import {
-  TransactionFactory,
+  TransactionFactoryHandler,
   TransactionFactoryCreateParams,
 } from './TransactionFactory';
 import { TransactionType } from './TransactionType';
 
 export class TransactionFactoryCommissionReceivement
-  implements TransactionFactory
+  implements TransactionFactoryHandler
 {
   shouldCreate(type: TransactionType): boolean {
     return type === TransactionType.COMMISION_RECEIVEMENT;

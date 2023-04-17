@@ -1,14 +1,14 @@
-import { Transaction } from 'src/domain/Transaction/Transaction';
+import { Transaction } from '../../../domain/Transaction/Transaction';
+import { ProductsRepositoryMemory } from '../../../modules/products/products.repository.memory';
+import { SellersRepositoryMemory } from '../../../modules/sellers/sellers.repository.memory';
 import { TransactionsRepository } from '../../../modules/transactions/transactions.repository';
-import { ProductsRepository } from 'src/modules/products/products.repository';
-import { SellersRepository } from 'src/modules/sellers/sellers.repository';
 
 export class TransactionsRepositoryMemory implements TransactionsRepository {
   transactions: Transaction[] = [];
 
   constructor(
-    private readonly productsRepository: ProductsRepository,
-    private readonly sellersRepository: SellersRepository,
+    private readonly productsRepository: ProductsRepositoryMemory,
+    private readonly sellersRepository: SellersRepositoryMemory,
   ) {}
 
   async createMany(transaction: Transaction[]): Promise<void> {

@@ -2,11 +2,17 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Seller } from '../../domain/Seller/Seller';
 import { SellersRepositoryMemory } from './sellers.repository.memory';
 import { SellersService } from './sellers.service';
+import { TransactionsRepositoryMemory } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryMemory';
+import { ProductsRepositoryMemory } from '../products/products.repository.memory';
 
 describe('SellersService', () => {
   let service: SellersService;
   const sellersRepository = new SellersRepositoryMemory();
-
+  const productsRepository = new ProductsRepositoryMemory();
+  const transactionsRepository = new TransactionsRepositoryMemory(
+    productsRepository,
+    sellersRepository,
+  );
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -14,6 +20,10 @@ describe('SellersService', () => {
         {
           provide: 'SELLERS_REPOSITORY',
           useValue: sellersRepository,
+        },
+        {
+          provide: 'TRANSACTIONS_REPOSITORY',
+          useValue: transactionsRepository,
         },
       ],
     }).compile();

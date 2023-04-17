@@ -1,12 +1,12 @@
 import { Transaction } from './Transaction';
 import { TransactionAffiliateSell } from './TransactionAffiliateSell';
 import {
-  TransactionFactory,
+  TransactionFactoryHandler,
   TransactionFactoryCreateParams,
 } from './TransactionFactory';
 import { TransactionType } from './TransactionType';
 
-export class TransactionFactoryAffiliateSell implements TransactionFactory {
+export class TransactionFactoryAffiliateSell implements TransactionFactoryHandler {
   shouldCreate(type: TransactionType): boolean {
     return type === TransactionType.AFFILIATE_SELL;
   }

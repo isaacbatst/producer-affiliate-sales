@@ -1,12 +1,12 @@
 import { Transaction } from './Transaction';
 import { TransactionCreatorSell } from './TransactionCreatorSell';
 import {
-  TransactionFactory,
+  TransactionFactoryHandler,
   TransactionFactoryCreateParams,
 } from './TransactionFactory';
 import { TransactionType } from './TransactionType';
 
-export class TransactionFactoryCreatorSell implements TransactionFactory {
+export class TransactionFactoryCreatorSell implements TransactionFactoryHandler {
   shouldCreate(type: TransactionType): boolean {
     return type === TransactionType.CREATOR_SELL;
   }

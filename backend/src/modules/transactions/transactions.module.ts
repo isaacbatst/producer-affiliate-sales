@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
+import { IdGeneratorCrypto } from '../../infra/common/IdGenerator/IdGeneratorCrypto';
 import { DatasourceModule } from '../datasource/datasource.module';
 import { TransactionsController } from './transactions.controller';
 import { TransactionsService } from './transactions.service';
-import { IdGeneratorFake } from '../../infra/common/IdGenerator/IdGeneratorFake';
 
 @Module({
   controllers: [TransactionsController],
@@ -10,7 +10,7 @@ import { IdGeneratorFake } from '../../infra/common/IdGenerator/IdGeneratorFake'
     TransactionsService,
     {
       provide: 'ID_GENERATOR',
-      useValue: new IdGeneratorFake(),
+      useValue: new IdGeneratorCrypto(),
     },
   ],
   imports: [DatasourceModule],

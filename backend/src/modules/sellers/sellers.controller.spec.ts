@@ -4,10 +4,17 @@ import { IdGeneratorFake } from '../../infra/common/IdGenerator/IdGeneratorFake'
 import { SellersController } from './sellers.controller';
 import { SellersRepositoryMemory } from './sellers.repository.memory';
 import { SellersService } from './sellers.service';
+import { TransactionsRepositoryMemory } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryMemory';
+import { ProductsRepositoryMemory } from '../products/products.repository.memory';
 
 describe('SellersController', () => {
   let controller: SellersController;
   const sellersRepository = new SellersRepositoryMemory();
+  const productsRepository = new ProductsRepositoryMemory();
+  const transactionsRepository = new TransactionsRepositoryMemory(
+    productsRepository,
+    sellersRepository,
+  );
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -17,6 +24,10 @@ describe('SellersController', () => {
         {
           provide: 'SELLERS_REPOSITORY',
           useValue: sellersRepository,
+        },
+        {
+          provide: 'TRANSACTIONS_REPOSITORY',
+          useValue: transactionsRepository,
         },
         {
           provide: 'ID_GENERATOR',
