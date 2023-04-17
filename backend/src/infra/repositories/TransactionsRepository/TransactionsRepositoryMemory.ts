@@ -27,6 +27,12 @@ export class TransactionsRepositoryMemory implements TransactionsRepository {
     return this.transactions;
   }
 
+  async getByProduct(id: string): Promise<Transaction[]> {
+    return this.transactions.filter(
+      (transaction) => transaction.getProduct().getId() === id,
+    );
+  }
+
   private getUniques<T extends { getId(): string }>(array: T[]): T[] {
     return array.filter(
       (item, index) =>

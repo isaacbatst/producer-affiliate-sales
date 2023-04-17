@@ -61,5 +61,14 @@ describe('AppController (e2e)', () => {
       const products = await request(app.getHttpServer()).get('/products');
       expect(products.body).toHaveLength(3);
     });
+
+    it('/products/:id/transactions (GET)', async () => {
+      const products = await request(app.getHttpServer()).get('/products');
+      const [product] = products.body;
+      const transactions = await request(app.getHttpServer()).get(
+        `/products/${product.id}/transactions`,
+      );
+      expect(transactions.body).not.toHaveLength(0);
+    });
   });
 });

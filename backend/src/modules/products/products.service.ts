@@ -2,12 +2,17 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ProductDto } from './product.dto';
 import { ProductsMapper } from './products.mapper';
 import { ProductsRepository } from './products.repository';
+import { TransactionDto } from '../transactions/transactions.dto';
+import { TransactionsRepository } from '../transactions/transactions.repository';
+import { TransactionsMapper } from '../transactions/transactions.mapper';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @Inject('PRODUCTS_REPOSITORY')
     private readonly productsRepository: ProductsRepository,
+    @Inject('TRANSACTIONS_REPOSITORY')
+    private readonly transactionsRepository: TransactionsRepository,
   ) {}
 
   async getAll(): Promise<ProductDto[]> {
@@ -22,5 +27,12 @@ export class ProductsService {
     }
 
     return ProductsMapper.toDto(product);
+  }
+
+  async getProductTransactions(productId: string): Promise<TransactionDto[]> {
+    const transactions = await this.transactionsRepository.getByProduct(
+      productId,
+    );
+    return transactions.map(TransactionsMapper.toDto);
   }
 }

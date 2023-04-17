@@ -15,4 +15,10 @@ export class ProductsController {
     const product = await this.productsService.getById(id);
     return product;
   }
+
+  @Get('/:id/transactions')
+  async getProductTransactions(@Param('id') id: string) {
+    const transactions = await this.productsService.getProductTransactions(id);
+    return transactions;
+  }
 }

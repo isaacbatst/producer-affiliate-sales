@@ -35,4 +35,9 @@ export class ApiGatewayAxios implements ApiGateway {
     const response = await this.axios.get(`/products/${id}`)
     return response.data
   }
+
+  async getProductTransactions(id: string): Promise<TransactionDto[]> {
+    const response = await this.axios.get(`/products/${id}/transactions`)
+    return response.data
+  }
 }
