@@ -31,8 +31,10 @@ The environment variables must be set as described on `.env.example` files.
 
 This project brings `docker-compose` files with production and development configuration.
 
-- **Production build**: `docker-compose up`
-- **Development build**:`docker compose -f docker-compose.dev.yml up`
+- **Production build**: `env API_PORT=3000 docker-compose up`
+- **Development build**:`env API_PORT=3000 docker compose -f docker-compose.dev.yml up`
+
+> Note that if you don't set `API_PORT`, compose will publish the API into an ephemeral port.
 
 ### Database
 
