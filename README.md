@@ -10,7 +10,8 @@ A transactions is a buy/sell contract. Each transaction changes the creator/affi
 
 - [x] **Home Page**: uploads sales files, processes and persists the operation.
 - [x] **Home Page**: lists all transactions.
-- [x] **Seller Page**: shows seller balance.
+- [x] **Seller Page**: shows seller balance and transactions.
+- [x] **Product Page**: show product creator/affiliates and transactions.
 - [ ] Error handling.
 
 ## Setup
