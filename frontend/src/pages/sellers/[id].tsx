@@ -1,19 +1,23 @@
+import TransactionsList from '@/components/Home/TransactionsList'
 import Header from '@/components/common/Header'
 import ItemSection from '@/components/common/ItemSection'
 import { Money } from '@/domain/Money'
 import { useSeller } from '@/hooks/useSeller'
+import { useSellerTransactions } from '@/hooks/useSellerTransactions'
 import { ApiGatewayFactory } from '@/infra/gateways/ApiGatewayFactory'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 
 const SellerPage: NextPage = () => {
   const router = useRouter()
+  const sellerId = router.query.id as string
   const apiGateway = ApiGatewayFactory.make()
-  const { isLoading, seller } = useSeller(router.query.id as string, apiGateway)
+  const {isLoading: isLoadingTransactions, transactions} = useSellerTransactions(sellerId, apiGateway)
+  const { isLoading: isLoadingSeller, seller } = useSeller(sellerId, apiGateway)
   return (
     <main className='min-h-screen flex flex-col'>
       <Header />
-      {isLoading && <p>Carregando...</p>}
+      {isLoadingSeller && <p>Carregando...</p>}
       <ItemSection title='Informações do Vendedor'>
         {seller && (
           <>
@@ -25,10 +29,11 @@ const SellerPage: NextPage = () => {
             </p>
           </>
         )}
-        {!isLoading && !seller && (
+        {!isLoadingSeller && !seller && (
           <p className='text-sm lg:text-xl text-center font-light'>Vendedor não encontrado</p>
         )}
       </ItemSection>
+      <TransactionsList isLoading={isLoadingTransactions} transactions={transactions} />
     </main>
   )
 }

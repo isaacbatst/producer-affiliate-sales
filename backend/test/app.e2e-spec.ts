@@ -70,5 +70,19 @@ describe('AppController (e2e)', () => {
       );
       expect(transactions.body).not.toHaveLength(0);
     });
+
+    it('/sellers (GET)', async () => {
+      const sellers = await request(app.getHttpServer()).get('/sellers');
+      expect(sellers.body).toHaveLength(7);
+    });
+
+    it('/sellers/:id/transactions (GET)', async () => {
+      const sellers = await request(app.getHttpServer()).get('/sellers');
+      const [seller] = sellers.body;
+      const transactions = await request(app.getHttpServer()).get(
+        `/sellers/${seller.id}/transactions`,
+      );
+      expect(transactions.body).not.toHaveLength(0);
+    });
   });
 });

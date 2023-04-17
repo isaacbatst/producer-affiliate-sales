@@ -15,4 +15,10 @@ export class SellersController {
     const seller = await this.sellersService.getById(id);
     return seller;
   }
+
+  @Get('/:id/transactions')
+  async getSellerTransactions(@Param('id') id: string) {
+    const transactions = await this.sellersService.getSellerTransactions(id);
+    return transactions;
+  }
 }

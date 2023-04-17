@@ -25,6 +25,35 @@ export class ApiGatewayFake implements ApiGateway {
     }
   }
 
+  async getSellerTransactions(): Promise<TransactionDto[]> {
+    return [
+      {
+        id: "1",
+        type: 1,
+        date: "2022-12-01",
+        value: 100,
+        product: {
+          id: "1",
+          name: "Product 1",
+          affiliates: [
+            {
+              id: "1",
+              name: "Affiliate 1",
+            }
+          ],
+          creator: {
+            id: "1",
+            name: "Creator 1",
+          }
+        },
+        seller: {
+          id: "1",
+          name: "Seller 1",
+        },
+      }
+    ]
+  }
+
   async getProductTransactions(): Promise<TransactionDto[]> {
     return [
       {

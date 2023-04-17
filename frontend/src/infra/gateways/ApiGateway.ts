@@ -8,4 +8,5 @@ export interface ApiGateway {
   getSeller(id: string): Promise<Seller>
   getProduct(id: string): Promise<ProductDto>
   getProductTransactions(id: string): Promise<TransactionDto[]>
+  getSellerTransactions(id: string): Promise<TransactionDto[]>
 }

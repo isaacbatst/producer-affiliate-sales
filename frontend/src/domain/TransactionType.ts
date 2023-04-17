@@ -7,7 +7,7 @@ export enum TransactionTypeEnum {
 
 export class TransactionType {
   private static readonly printMap: Record<TransactionTypeEnum, string> = {
-    [TransactionTypeEnum.CREATOR_SELL]: 'Venda produtor',
+    [TransactionTypeEnum.CREATOR_SELL]: 'Venda criador',
     [TransactionTypeEnum.AFFILIATE_SELL]: 'Venda afiliado',
     [TransactionTypeEnum.COMMISSION_PAYMENT]: 'Pagamento de comissão',
     [TransactionTypeEnum.COMMISION_RECEIVEMENT]: 'Recebimento de comissão',
