@@ -70,6 +70,23 @@ export class TransactionsRepositoryPrisma implements TransactionsRepository {
                 id: transaction.getProduct().getId(),
                 name: transaction.getProduct().getName(),
                 price: transaction.getProduct().getPrice(),
+                affiliates: {
+                  connectOrCreate: transaction
+                    .getProduct()
+                    .getAffiliates()
+                    .map((affiliate) => {
+                      return {
+                        where: {
+                          id: affiliate.getId(),
+                        },
+                        create: {
+                          id: affiliate.getId(),
+                          balance: affiliate.getBalance(),
+                          name: affiliate.getName(),
+                        },
+                      };
+                    }),
+                },
                 creator: {
                   connectOrCreate: {
                     where: {

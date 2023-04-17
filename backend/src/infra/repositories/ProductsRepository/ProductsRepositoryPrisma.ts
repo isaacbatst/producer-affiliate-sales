@@ -10,20 +10,33 @@ import { Inject } from '@nestjs/common';
 
 export class ProductsRepositoryPrisma implements ProductsRepository {
   static toDomain(
-    product: PrismaProduct & {
+    prismaProduct: PrismaProduct & {
       creator: PrismaSeller;
+      affiliates: PrismaSeller[];
     },
   ): Product {
-    return new Product({
-      id: product.id,
-      name: product.name,
-      price: product.price,
+    const product = new Product({
+      id: prismaProduct.id,
+      name: prismaProduct.name,
+      price: prismaProduct.price,
       creator: new Seller({
-        id: product.creator.id,
-        balance: product.creator.balance,
-        name: product.creator.name,
+        id: prismaProduct.creator.id,
+        balance: prismaProduct.creator.balance,
+        name: prismaProduct.creator.name,
       }),
     });
+
+    prismaProduct.affiliates.forEach((affiliate) => {
+      product.addAffiliate(
+        new Seller({
+          id: affiliate.id,
+          balance: affiliate.balance,
+          name: affiliate.name,
+        }),
+      );
+    });
+
+    return product;
   }
   constructor(@Inject('PRISMA_SERVICE') private prisma: PrismaService) {}
 
@@ -45,6 +58,7 @@ export class ProductsRepositoryPrisma implements ProductsRepository {
     const products = await this.prisma.product.findMany({
       include: {
         creator: true,
+        affiliates: true,
       },
     });
 
@@ -57,6 +71,7 @@ export class ProductsRepositoryPrisma implements ProductsRepository {
       },
       include: {
         creator: true,
+        affiliates: true,
       },
     });
 
