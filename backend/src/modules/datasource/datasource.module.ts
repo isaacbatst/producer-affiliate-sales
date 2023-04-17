@@ -3,19 +3,25 @@ import { TransactionsRepositoryMemory } from '../../infra/repositories/Transacti
 import { SellersRepositoryMemory } from '../sellers/sellers.repository.memory';
 import { ProductsRepositoryMemory } from '../products/products.repository.memory';
 
+const productsRepository = new ProductsRepositoryMemory();
+const sellersRepository = new SellersRepositoryMemory();
+
 @Module({
   providers: [
     {
       provide: 'TRANSACTIONS_REPOSITORY',
-      useValue: new TransactionsRepositoryMemory(),
+      useValue: new TransactionsRepositoryMemory(
+        productsRepository,
+        sellersRepository,
+      ),
     },
     {
       provide: 'SELLERS_REPOSITORY',
-      useValue: new SellersRepositoryMemory(),
+      useValue: sellersRepository,
     },
     {
       provide: 'PRODUCTS_REPOSITORY',
-      useValue: new ProductsRepositoryMemory(),
+      useValue: productsRepository,
     },
   ],
   exports: [

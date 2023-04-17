@@ -1,5 +1,6 @@
 import { Transaction } from 'src/domain/Transaction/Transaction';
 import { TransactionDto } from './transactions.dto';
+import { ProductsMapper } from '../products/products.mapper';
 
 export class TransactionsMapper {
   static toDto(transaction: Transaction): TransactionDto {
@@ -8,18 +9,7 @@ export class TransactionsMapper {
       id: transaction.getId(),
       type: transaction.getType(),
       date: transaction.getDate().toISOString(),
-      product: {
-        id: product.getId(),
-        name: product.getName(),
-        creator: {
-          id: product.getCreator().getId(),
-          name: product.getCreator().getName(),
-        },
-        affiliates: product.getAffiliates().map((affiliate) => ({
-          id: affiliate.getId(),
-          name: affiliate.getName(),
-        })),
-      },
+      product: ProductsMapper.toDto(product),
       value: transaction.getValue(),
       seller: {
         id: transaction.getSeller().getId(),

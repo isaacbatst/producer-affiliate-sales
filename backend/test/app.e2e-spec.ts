@@ -35,7 +35,7 @@ describe('AppController (e2e)', () => {
   });
 
   describe('Given processing sales', () => {
-    it('/transactions/process (POST)', async () => {
+    beforeAll(async () => {
       const filePath = path.join(Constants.ROOT_DIR, 'sample', 'sales.txt');
       const fileExists = fs.stat(filePath).then((stats) => stats.isFile());
       expect(fileExists).toBeTruthy();
@@ -45,7 +45,9 @@ describe('AppController (e2e)', () => {
         .set('Content-Type', 'multipart/form-data')
         .attach('sales', filePath)
         .expect(204);
+    });
 
+    it('/transactions/process (POST)', async () => {
       const transactions = await request(app.getHttpServer()).get(
         '/transactions',
       );
@@ -53,6 +55,11 @@ describe('AppController (e2e)', () => {
 
       const sellers = await request(app.getHttpServer()).get('/sellers');
       expect(sellers.body).toHaveLength(7);
+    });
+
+    it('/products (GET)', async () => {
+      const products = await request(app.getHttpServer()).get('/products');
+      expect(products.body).toHaveLength(3);
     });
   });
 });

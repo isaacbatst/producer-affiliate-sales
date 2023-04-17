@@ -1,13 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { SellerType } from '../../domain/Seller/SellerType';
-import { Transaction } from '../../domain/Transaction/Transaction';
-import { TransactionsListFactory } from './factories/TransactionListFactory';
 import { IdGenerator } from '../../infra/common/IdGenerator/IdGenerator';
 import { ProductsRepository } from '../products/products.repository';
 import { SellersRepository } from '../sellers/sellers.repository';
+import { TransactionsListFactory } from './factories/TransactionListFactory';
 import { CreateTransactionDto, TransactionDto } from './transactions.dto';
-import { TransactionsRepository } from './transactions.repository';
 import { TransactionsMapper } from './transactions.mapper';
+import { TransactionsRepository } from './transactions.repository';
 
 @Injectable()
 export class TransactionsService {

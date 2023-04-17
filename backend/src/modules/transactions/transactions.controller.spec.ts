@@ -9,8 +9,12 @@ import { ProductsRepositoryMemory } from '../products/products.repository.memory
 
 describe('TransactionsController', () => {
   let controller: TransactionsController;
-  const transactionsRepository = new TransactionsRepositoryMemory();
+  const productsRepository = new ProductsRepositoryMemory();
   const sellersRepository = new SellersRepositoryMemory();
+  const transactionsRepository = new TransactionsRepositoryMemory(
+    productsRepository,
+    sellersRepository,
+  );
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

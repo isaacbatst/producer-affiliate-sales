@@ -8,9 +8,12 @@ import { TransactionsService } from './transactions.service';
 
 describe('TransactionsService', () => {
   let service: TransactionsService;
-  const transactionsRepository = new TransactionsRepositoryMemory();
-  const sellersRepository = new SellersRepositoryMemory();
   const productsRepository = new ProductsRepositoryMemory();
+  const sellersRepository = new SellersRepositoryMemory();
+  const transactionsRepository = new TransactionsRepositoryMemory(
+    productsRepository,
+    sellersRepository,
+  );
   const idGenerator = new IdGeneratorFake();
 
   beforeEach(async () => {
@@ -39,6 +42,7 @@ describe('TransactionsService', () => {
     service = module.get<TransactionsService>(TransactionsService);
     sellersRepository.sellers = [];
     transactionsRepository.transactions = [];
+    productsRepository.products = [];
   });
 
   it('should be defined', () => {
@@ -57,22 +61,24 @@ describe('TransactionsService', () => {
     expect(transactions).toHaveLength(20);
   });
 
-  it('should create products', async () => {
+  it('should update sellers balance', async () => {
     await service.processTransactions(getTransactionsMock());
-    const productIds = transactionsRepository.transactions.map((transaction) =>
-      transaction.getProduct().getId(),
+    const seller = sellersRepository.sellers.find(
+      (seller) => seller.getName() === 'JOSE CARLOS',
     );
-    const uniqueIds = [...new Set(productIds)];
 
-    expect(uniqueIds).toHaveLength(3);
+    expect(seller).toBeDefined();
+    expect(seller?.getBalance()).toBe(21000);
   });
 
-  it('should create sellers', async () => {
+  it('should create products', async () => {
     await service.processTransactions(getTransactionsMock());
-    const sellerIds = transactionsRepository.transactions.map((transaction) =>
-      transaction.getSeller().getId(),
-    );
-    const uniqueIds = [...new Set(sellerIds)];
-    expect(uniqueIds).toHaveLength(7);
+    expect(productsRepository.products).toHaveLength(3);
+  });
+
+  it('should return all transactions', async () => {
+    await service.processTransactions(getTransactionsMock());
+    const transactions = await service.getAll();
+    expect(transactions).toHaveLength(20);
   });
 });
