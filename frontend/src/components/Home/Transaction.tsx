@@ -23,7 +23,13 @@ const Transaction = ({transaction}: Props) => {
         </Link>
       </p>
       <p className='text-sm'><strong className='text-base'>Valor:</strong> {value.print()}</p>
-      <p className='text-sm'><strong className='text-base'>Produto:</strong> {transaction.product.name}</p>
+      <p className='text-sm'><strong className='text-base'>Produto:</strong>
+        <Link href={`/products/${transaction.product.id}`}
+          className='bg-theme-yellow-500 hover:bg-theme-yellow-600 transition-colors inline-block
+        px-3 py-1 ml-1 text-slate-900 border border-slate-900 rounded-lg font-medium active:scale-105'
+        >
+          {transaction.product.name} 
+        </Link></p>
       <p className='text-sm'><strong className='text-base'>Tipo:</strong> {type.print()}</p>
       <p className='text-sm'><strong className='text-base'>Data:</strong> {new Date(transaction.date).toLocaleString()}</p>
     </li>
