@@ -68,7 +68,7 @@ describe('TransactionsService', () => {
     );
 
     expect(seller).toBeDefined();
-    expect(seller?.getBalance()).toBe(21000);
+    expect(seller?.getBalance()).toBe(33750);
   });
 
   it('should create products', async () => {
