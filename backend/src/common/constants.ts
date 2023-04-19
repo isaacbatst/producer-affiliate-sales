@@ -20,4 +20,7 @@ export class Constants {
 
   // cookies
   static readonly AUTH_COOKIE = 'ceaf_auth';
+
+  // others
+  static readonly IS_PUBLIC_KEY = 'isPublic';
 }

@@ -39,4 +39,25 @@ export class UsersRepositoryPrisma implements UsersRepository {
       },
     });
   }
+
+  async findByToken(token: string): Promise<User | undefined> {
+    const session = await this.prisma.session.findUnique({
+      where: {
+        token,
+      },
+      include: {
+        user: {
+          include: {
+            sessions: true,
+          },
+        },
+      },
+    });
+
+    if (!session) {
+      return undefined;
+    }
+
+    return UsersRepositoryPrismaMapper.toDomain(session.user);
+  }
 }

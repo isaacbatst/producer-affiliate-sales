@@ -18,6 +18,20 @@ const resetDatabase = async (app: INestApplication) => {
   await prisma.user.deleteMany();
 };
 
+const login = async (app: INestApplication) => {
+  const response = await request(app.getHttpServer())
+    .post('/auth/login')
+    .send({
+      email: 'u1@u1.com',
+      password: '1234',
+    })
+    .expect(200);
+
+  return {
+    authCookie: response.get('Set-Cookie')[0],
+  };
+};
+
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
@@ -27,6 +41,8 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.use(cookieParser());
+
     await app.init();
     await resetDatabase(app);
   });
@@ -94,10 +110,26 @@ describe('AppController (e2e)', () => {
     });
   });
 
-  describe('Given empty transaction datasource', () => {
-    it('/transactions (GET)', () => {
+  describe('Given wrong session token', () => {
+    it('/transactions (GET)', async () => {
+      await login(app);
       return request(app.getHttpServer())
         .get('/transactions')
+        .set('Cookie', 'wrong-session-token')
+        .expect(401);
+    });
+  });
+
+  describe('Given empty transaction datasource', () => {
+    let authCookie: string;
+    beforeAll(async () => {
+      authCookie = (await login(app)).authCookie;
+    });
+
+    it('/transactions (GET)', async () => {
+      return request(app.getHttpServer())
+        .get('/transactions')
+        .set('Cookie', authCookie)
         .expect(200)
         .expect([]);
     });
@@ -105,13 +137,18 @@ describe('AppController (e2e)', () => {
     it('/transactions (GET)', () => {
       return request(app.getHttpServer())
         .get('/transactions')
+        .set('Cookie', authCookie)
         .expect(200)
         .expect([]);
     });
   });
 
   describe('Given processing sales', () => {
+    let authCookie: string;
+
     beforeAll(async () => {
+      authCookie = (await login(app)).authCookie;
+
       const filePath = path.join(Constants.ROOT_DIR, 'sample', 'sales.txt');
       const fileExists = fs.stat(filePath).then((stats) => stats.isFile());
       expect(fileExists).toBeTruthy();
@@ -119,45 +156,61 @@ describe('AppController (e2e)', () => {
       await request(app.getHttpServer())
         .post('/transactions/process')
         .set('Content-Type', 'multipart/form-data')
+        .set('Cookie', authCookie)
         .attach('sales', filePath)
         .expect(204);
     });
 
     it('/transactions/process (POST)', async () => {
-      const transactions = await request(app.getHttpServer()).get(
-        '/transactions',
-      );
+      const transactions = await request(app.getHttpServer())
+        .get('/transactions')
+        .set('Cookie', authCookie);
       expect(transactions.body).toHaveLength(20);
 
-      const sellers = await request(app.getHttpServer()).get('/sellers');
+      const sellers = await request(app.getHttpServer())
+        .get('/sellers')
+        .set('Cookie', authCookie);
+
       expect(sellers.body).toHaveLength(7);
     });
 
     it('/products (GET)', async () => {
-      const products = await request(app.getHttpServer()).get('/products');
+      const products = await request(app.getHttpServer())
+        .get('/products')
+        .set('Cookie', authCookie);
+
       expect(products.body).toHaveLength(3);
     });
 
     it('/products/:id/transactions (GET)', async () => {
-      const products = await request(app.getHttpServer()).get('/products');
+      const products = await request(app.getHttpServer())
+        .get('/products')
+        .set('Cookie', authCookie);
       const [product] = products.body;
-      const transactions = await request(app.getHttpServer()).get(
-        `/products/${product.id}/transactions`,
-      );
+      const transactions = await request(app.getHttpServer())
+        .get(`/products/${product.id}/transactions`)
+        .set('Cookie', authCookie);
       expect(transactions.body).not.toHaveLength(0);
     });
 
     it('/sellers (GET)', async () => {
-      const sellers = await request(app.getHttpServer()).get('/sellers');
+      const sellers = await request(app.getHttpServer())
+        .get('/sellers')
+        .set('Cookie', authCookie);
+
       expect(sellers.body).toHaveLength(7);
     });
 
     it('/sellers/:id/transactions (GET)', async () => {
-      const sellers = await request(app.getHttpServer()).get('/sellers');
+      const sellers = await request(app.getHttpServer())
+        .get('/sellers')
+        .set('Cookie', authCookie);
+
       const [seller] = sellers.body;
-      const transactions = await request(app.getHttpServer()).get(
-        `/sellers/${seller.id}/transactions`,
-      );
+      const transactions = await request(app.getHttpServer())
+        .get(`/sellers/${seller.id}/transactions`)
+        .set('Cookie', authCookie);
+
       expect(transactions.body).not.toHaveLength(0);
     });
   });

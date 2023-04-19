@@ -20,4 +20,10 @@ export class UsersRepositoryMemory implements UsersRepository {
     const index = this.users.findIndex((u) => u.getId() === user.getId());
     this.users[index] = user;
   }
+
+  async findByToken(token: string): Promise<User | undefined> {
+    return this.users.find((user) =>
+      user.getSessions().find((session) => session.getToken() === token),
+    );
+  }
 }

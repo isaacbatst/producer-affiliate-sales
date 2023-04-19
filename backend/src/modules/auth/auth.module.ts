@@ -5,6 +5,8 @@ import { DatasourceModule } from '../datasource/datasource.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { Constants } from 'src/common/constants';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth.guard';
 
 @Module({
   controllers: [AuthController],
@@ -17,6 +19,10 @@ import { Constants } from 'src/common/constants';
     {
       provide: Constants.TOKEN_GENERATOR,
       useClass: TokenGeneratorCrypto,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
     },
   ],
   imports: [DatasourceModule],

@@ -50,7 +50,7 @@ describe('AuthController', () => {
       } as unknown as Response,
     );
     expect(cookieFn).toHaveBeenCalledWith(
-      'token',
+      Constants.AUTH_COOKIE,
       'token-1',
       expect.objectContaining({
         httpOnly: true,
