@@ -10,7 +10,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npx prisma generate
-RUN yarn build
 EXPOSE 3000
 ENTRYPOINT ["yarn"]
-CMD ["start:prod"]
+CMD ["build", "&&", "yarn", "start:prod"]

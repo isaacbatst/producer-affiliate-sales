@@ -5,7 +5,6 @@ services:
     env_file: ./backend/.env
     environment:
       POSTGRES_PASSWORD:
-
   backend:
     build: ./backend
     env_file: ./backend/.env

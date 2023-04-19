@@ -10,7 +10,6 @@ services:
   backend:
     build: 
       context: ./backend
-      dockerfile: Dockerfile.dev
     command: start:dev
     env_file: ./backend/.env
     ports:
