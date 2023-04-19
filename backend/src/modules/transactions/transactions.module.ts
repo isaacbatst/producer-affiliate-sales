@@ -3,13 +3,14 @@ import { IdGeneratorCrypto } from '../../infra/common/IdGenerator/IdGeneratorCry
 import { DatasourceModule } from '../datasource/datasource.module';
 import { TransactionsController } from './transactions.controller';
 import { TransactionsService } from './transactions.service';
+import { Constants } from 'src/common/constants';
 
 @Module({
   controllers: [TransactionsController],
   providers: [
     TransactionsService,
     {
-      provide: 'ID_GENERATOR',
+      provide: Constants.ID_GENERATOR,
       useClass: IdGeneratorCrypto,
     },
   ],

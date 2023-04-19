@@ -4,17 +4,18 @@ import { TokenGeneratorCrypto } from 'src/infra/common/TokenGenerator/TokenGener
 import { DatasourceModule } from '../datasource/datasource.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { Constants } from 'src/common/constants';
 
 @Module({
   controllers: [AuthController],
   providers: [
     AuthService,
     {
-      provide: 'ENCRYPTER',
+      provide: Constants.ENCRYPTER,
       useClass: EncrypterBcrypt,
     },
     {
-      provide: 'TOKEN_GENERATOR',
+      provide: Constants.TOKEN_GENERATOR,
       useClass: TokenGeneratorCrypto,
     },
   ],

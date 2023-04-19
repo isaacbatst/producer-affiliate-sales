@@ -4,6 +4,7 @@ import { SellersRepositoryMemory } from './sellers.repository.memory';
 import { SellersService } from './sellers.service';
 import { TransactionsRepositoryMemory } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryMemory';
 import { ProductsRepositoryMemory } from '../products/products.repository.memory';
+import { Constants } from 'src/common/constants';
 
 describe('SellersService', () => {
   let service: SellersService;
@@ -18,11 +19,11 @@ describe('SellersService', () => {
       providers: [
         SellersService,
         {
-          provide: 'SELLERS_REPOSITORY',
+          provide: Constants.SELLERS_REPOSITORY,
           useValue: sellersRepository,
         },
         {
-          provide: 'TRANSACTIONS_REPOSITORY',
+          provide: Constants.TRANSACTIONS_REPOSITORY,
           useValue: transactionsRepository,
         },
       ],

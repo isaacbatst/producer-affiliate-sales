@@ -6,6 +6,7 @@ import { TokenGeneratorFake } from 'src/infra/common/TokenGenerator/TokenGenerat
 import { UsersRepositoryMemory } from 'src/infra/repositories/UsersRepository/UsersRepositoryMemory';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { Constants } from 'src/common/constants';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -19,15 +20,15 @@ describe('AuthController', () => {
         AuthService,
         { provide: APP_PIPE, useValue: new ValidationPipe() },
         {
-          provide: 'USERS_REPOSITORY',
+          provide: Constants.USERS_REPOSITORY,
           useValue: usersRepository,
         },
         {
-          provide: 'ENCRYPTER',
+          provide: Constants.ENCRYPTER,
           useValue: encrypter,
         },
         {
-          provide: 'TOKEN_GENERATOR',
+          provide: Constants.TOKEN_GENERATOR,
           useValue: new TokenGeneratorFake(),
         },
       ],

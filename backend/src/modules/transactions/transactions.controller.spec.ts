@@ -6,6 +6,7 @@ import { TransactionsController } from './transactions.controller';
 import { TransactionsService } from './transactions.service';
 import { getSalesFileMock } from './transactions.mock';
 import { ProductsRepositoryMemory } from '../products/products.repository.memory';
+import { Constants } from 'src/common/constants';
 
 describe('TransactionsController', () => {
   let controller: TransactionsController;
@@ -22,19 +23,19 @@ describe('TransactionsController', () => {
       providers: [
         TransactionsService,
         {
-          provide: 'TRANSACTIONS_REPOSITORY',
+          provide: Constants.TRANSACTIONS_REPOSITORY,
           useValue: transactionsRepository,
         },
         {
-          provide: 'SELLERS_REPOSITORY',
+          provide: Constants.SELLERS_REPOSITORY,
           useValue: sellersRepository,
         },
         {
-          provide: 'PRODUCTS_REPOSITORY',
+          provide: Constants.PRODUCTS_REPOSITORY,
           useValue: new ProductsRepositoryMemory(),
         },
         {
-          provide: 'ID_GENERATOR',
+          provide: Constants.ID_GENERATOR,
           useValue: new IdGeneratorFake(),
         },
       ],

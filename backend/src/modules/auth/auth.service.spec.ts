@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { UsersRepositoryMemory } from '../../infra/repositories/UsersRepository/UsersRepositoryMemory';
 import { EncrypterFake } from '../../infra/common/Encrypter/EncrypterFake';
 import { TokenGeneratorFake } from '../../infra/common/TokenGenerator/TokenGeneratorFake';
+import { Constants } from 'src/common/constants';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -14,15 +15,15 @@ describe('AuthService', () => {
       providers: [
         AuthService,
         {
-          provide: 'USERS_REPOSITORY',
+          provide: Constants.USERS_REPOSITORY,
           useValue: usersRepository,
         },
         {
-          provide: 'ENCRYPTER',
+          provide: Constants.ENCRYPTER,
           useValue: encrypter,
         },
         {
-          provide: 'TOKEN_GENERATOR',
+          provide: Constants.TOKEN_GENERATOR,
           useValue: new TokenGeneratorFake(),
         },
       ],

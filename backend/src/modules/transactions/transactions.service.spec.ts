@@ -5,6 +5,7 @@ import { ProductsRepositoryMemory } from '../products/products.repository.memory
 import { SellersRepositoryMemory } from '../sellers/sellers.repository.memory';
 import { getTransactionsMock } from './transactions.mock';
 import { TransactionsService } from './transactions.service';
+import { Constants } from 'src/common/constants';
 
 describe('TransactionsService', () => {
   let service: TransactionsService;
@@ -21,19 +22,19 @@ describe('TransactionsService', () => {
       providers: [
         TransactionsService,
         {
-          provide: 'TRANSACTIONS_REPOSITORY',
+          provide: Constants.TRANSACTIONS_REPOSITORY,
           useValue: transactionsRepository,
         },
         {
-          provide: 'SELLERS_REPOSITORY',
+          provide: Constants.SELLERS_REPOSITORY,
           useValue: sellersRepository,
         },
         {
-          provide: 'PRODUCTS_REPOSITORY',
+          provide: Constants.PRODUCTS_REPOSITORY,
           useValue: productsRepository,
         },
         {
-          provide: 'ID_GENERATOR',
+          provide: Constants.ID_GENERATOR,
           useValue: idGenerator,
         },
       ],

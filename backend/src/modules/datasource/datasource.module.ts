@@ -5,36 +5,37 @@ import { PrismaService } from '../prisma/prisma.service';
 import { TransactionsRepositoryPrisma } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryPrisma';
 import { PrismaModule } from '../prisma/prisma.module';
 import { UsersRepositoryPrisma } from 'src/infra/repositories/UsersRepository/UsersRepositoryPrisma';
+import { Constants } from 'src/common/constants';
 
 @Module({
   imports: [PrismaModule],
   providers: [
     {
-      provide: 'PRISMA_SERVICE',
+      provide: Constants.PRISMA_SERVICE,
       useClass: PrismaService,
     },
     {
-      provide: 'TRANSACTIONS_REPOSITORY',
+      provide: Constants.TRANSACTIONS_REPOSITORY,
       useClass: TransactionsRepositoryPrisma,
     },
     {
-      provide: 'SELLERS_REPOSITORY',
+      provide: Constants.SELLERS_REPOSITORY,
       useClass: SellerRepositoryPrisma,
     },
     {
-      provide: 'PRODUCTS_REPOSITORY',
+      provide: Constants.PRODUCTS_REPOSITORY,
       useClass: ProductsRepositoryPrisma,
     },
     {
-      provide: 'USERS_REPOSITORY',
+      provide: Constants.USERS_REPOSITORY,
       useClass: UsersRepositoryPrisma,
     },
   ],
   exports: [
-    'TRANSACTIONS_REPOSITORY',
-    'SELLERS_REPOSITORY',
-    'PRODUCTS_REPOSITORY',
-    'USERS_REPOSITORY',
+    Constants.TRANSACTIONS_REPOSITORY,
+    Constants.SELLERS_REPOSITORY,
+    Constants.PRODUCTS_REPOSITORY,
+    Constants.USERS_REPOSITORY,
   ],
 })
 export class DatasourceModule {}
