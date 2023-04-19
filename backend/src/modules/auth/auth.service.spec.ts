@@ -35,6 +35,7 @@ describe('AuthService', () => {
   it('should sign in', async () => {
     const { token } = await service.signIn('u1@u1.com', '1234');
     expect(token).toBe('token-1');
+    expect(usersRepository.users[0].getSessions().length).toBe(1);
   });
 
   it('should throw if user not found', async () => {
