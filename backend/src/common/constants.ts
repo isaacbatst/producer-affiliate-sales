@@ -20,6 +20,7 @@ export class Constants {
 
   // cookies
   static readonly AUTH_COOKIE = 'ceaf_auth';
+  static readonly AUTH_COOKIE_EXPIRES_IN = 1000 * 60 * 60 * 24 * 7; // 1 WEEK
 
   // others
   static readonly IS_PUBLIC_KEY = 'isPublic';

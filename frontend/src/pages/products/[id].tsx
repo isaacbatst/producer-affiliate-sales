@@ -4,12 +4,15 @@ import TransactionsList from '@/components/common/TransactionsList/TransactionsL
 import { useProduct } from '@/hooks/useProduct'
 import { useProductTransactions } from '@/hooks/useProductTransactions'
 import { ApiGatewayFactory } from '@/infra/gateways/ApiGatewayFactory'
+import { redirectIfUnauthorized } from '@/infra/validateAuth'
+import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
+
+const apiGateway = ApiGatewayFactory.make()
 
 const ProductPage = () => {
   const router = useRouter()
   const productId = router.query.id as string
-  const apiGateway = ApiGatewayFactory.make()
 
   const { isLoading: isLoadingProduct, product } = useProduct(productId, apiGateway)
   const { isLoading: isLoadingTransactions, transactions} = useProductTransactions(productId, apiGateway)
@@ -52,6 +55,10 @@ const ProductPage = () => {
       <TransactionsList isLoading={isLoadingTransactions} transactions={transactions} />
     </main>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return redirectIfUnauthorized(apiGateway, context.req.headers.cookie)
 }
 
 export default ProductPage

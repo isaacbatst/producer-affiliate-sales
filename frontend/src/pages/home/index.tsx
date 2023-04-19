@@ -3,6 +3,8 @@ import TransactionsList from '@/components/common/TransactionsList/TransactionsL
 import SalesForm from '@/components/Home/SalesForm'
 import { useTransactions } from '@/hooks/useTransactions'
 import { ApiGatewayFactory } from '@/infra/gateways/ApiGatewayFactory'
+import { redirectIfUnauthorized } from '@/infra/validateAuth'
+import { GetServerSideProps } from 'next'
 
 const apiGateway = ApiGatewayFactory.make()
 
@@ -16,4 +18,10 @@ export default function Home() {
       <TransactionsList isLoading={isLoading} transactions={transactions} />
     </main>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  console.log(context.req.headers.cookie)
+
+  return redirectIfUnauthorized(apiGateway, context.req.headers.cookie)
 }

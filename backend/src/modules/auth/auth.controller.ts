@@ -1,10 +1,10 @@
 import { Body, Controller, HttpCode, Post, Req, Res } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { SignInDto } from './sign-in.dto';
 import { Request, Response } from 'express';
 import { Constants } from 'src/common/constants';
 import { Public } from 'src/decorators/Public';
 import { AuthenticatedRequest } from './auth.request';
+import { AuthService } from './auth.service';
+import { SignInDto } from './sign-in.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -14,6 +14,7 @@ export class AuthController {
   @HttpCode(200)
   @Post('login')
   async signIn(
+    @Req() request: Request,
     @Body() signInDto: SignInDto,
     @Res({ passthrough: true }) response: Response,
   ) {
@@ -21,7 +22,11 @@ export class AuthController {
       signInDto.email,
       signInDto.password,
     );
-    response.cookie(Constants.AUTH_COOKIE, token, { httpOnly: true });
+    response.cookie(Constants.AUTH_COOKIE, token, {
+      maxAge: Constants.AUTH_COOKIE_EXPIRES_IN,
+      httpOnly: true,
+      sameSite: request.secure ? 'none' : 'lax',
+    });
   }
 
   @HttpCode(200)

@@ -1,10 +1,10 @@
-import Home from '@/pages'
+import Login from '@/pages'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 describe('Home', () => {
   it('renders initial transactions', async () => {
-    render(<Home />)
+    render(<Login />)
 
     const heading = screen.getByRole('heading', {
       name: 'Criadores e Afiliados',
@@ -18,7 +18,7 @@ describe('Home', () => {
   it('submits sales file successfully', async () => {
     const user = userEvent.setup();
     render(
-      <Home />
+      <Login />
     )
 
     const input = screen.getByLabelText(/vendas/i);

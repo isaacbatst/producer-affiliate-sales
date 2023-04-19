@@ -2,6 +2,7 @@ import { ProductDto } from "@/domain/ProductDto";
 import { Seller } from "@/domain/Seller";
 import { TransactionDto } from "@/domain/TransactionDto";
 import { ApiGateway } from "./ApiGateway";
+import { UserDto } from "@/domain/UserDto";
 
 export class ApiGatewayFake implements ApiGateway {
   processTransactions(): Promise<void> {
@@ -118,5 +119,17 @@ export class ApiGatewayFake implements ApiGateway {
       name: "Seller 1",
       balance: 100,
     }
+  }
+
+  async validateAuth(): Promise<UserDto> {
+    return Promise.resolve({
+      id: "user-1",
+      name: "User 1",
+      email: "email@email.com",
+    });
+  }
+
+  async login(): Promise<void> {
+    return Promise.resolve();
   }
 }

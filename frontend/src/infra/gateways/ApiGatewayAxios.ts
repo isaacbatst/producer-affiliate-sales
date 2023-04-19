@@ -3,6 +3,7 @@ import { ApiGateway } from "./ApiGateway";
 import axios, {AxiosInstance} from 'axios'
 import { Seller } from "@/domain/Seller";
 import { ProductDto } from "@/domain/ProductDto";
+import { UserDto } from "@/domain/UserDto";
 
 export class ApiGatewayAxios implements ApiGateway {
   private axios: AxiosInstance;
@@ -10,6 +11,7 @@ export class ApiGatewayAxios implements ApiGateway {
   constructor(baseUrl: string){
     this.axios = axios.create({
       baseURL: baseUrl,
+      withCredentials: true
     })
   }
 
@@ -17,7 +19,7 @@ export class ApiGatewayAxios implements ApiGateway {
     await this.axios.post('/transactions/process', { sales: transactionsFile }, {
       headers: {
         'Content-Type': 'multipart/form-data'
-      }
+      },
     })
   }
 
@@ -44,5 +46,20 @@ export class ApiGatewayAxios implements ApiGateway {
   async getSellerTransactions(id: string): Promise<TransactionDto[]> {
     const response = await this.axios.get(`/sellers/${id}/transactions`)
     return response.data
+  }
+
+  async validateAuth(cookie: string | undefined): Promise<UserDto> {
+    const response = await this.axios.post('/auth/validate', {}, {
+      headers: {
+        cookie
+      }
+    })
+    return response.data 
+  }
+
+  async login(email: string, password: string): Promise<void> {
+    const response = await this.axios.post('/auth/login', { email, password })
+    console.log('heders')
+    console.log(response.headers)
   }
 }
