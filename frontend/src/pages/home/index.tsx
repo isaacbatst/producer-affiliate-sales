@@ -12,7 +12,8 @@ export default function Home() {
   return (
     <main className="flex flex-col min-h-screen">
       <Header />
-      <h1>Login</h1>
+      <SalesForm apiGateway={apiGateway} />
+      <TransactionsList isLoading={isLoading} transactions={transactions} />
     </main>
   )
 }

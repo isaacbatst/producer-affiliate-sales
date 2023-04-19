@@ -17,4 +17,7 @@ export class Constants {
 
   // services
   static readonly PRISMA_SERVICE = 'PRISMA_SERVICE';
+
+  // cookies
+  static readonly AUTH_COOKIE = 'ceaf_auth';
 }

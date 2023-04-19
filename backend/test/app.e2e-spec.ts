@@ -7,7 +7,8 @@ import * as path from 'path';
 import * as fs from 'fs/promises';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { Encrypter } from 'src/infra/common/Encrypter/Encrypter';
-
+import * as cookieParser from 'cookie-parser';
+import * as cookie from 'cookie';
 const resetDatabase = async (app: INestApplication) => {
   const prisma = app.get<PrismaService>(Constants.PRISMA_SERVICE);
   await prisma.transaction.deleteMany();
@@ -49,14 +50,17 @@ describe('AppController (e2e)', () => {
       });
     });
 
-    it('/auth/login (POST) with correct password', () => {
-      return request(app.getHttpServer())
+    it('/auth/login (POST) with correct password', async () => {
+      const response = await request(app.getHttpServer())
         .post('/auth/login')
         .send({
           email: 'u1@u1.com',
           password: '1234',
         })
         .expect(200);
+
+      const authCookie = cookie.parse(response.headers['set-cookie'][0]);
+      expect(authCookie[Constants.AUTH_COOKIE]).not.toHaveLength(0);
     });
 
     it('/auth/login (POST) with incorrect password', () => {

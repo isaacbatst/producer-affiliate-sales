@@ -7,6 +7,7 @@ import { UsersRepositoryMemory } from 'src/infra/repositories/UsersRepository/Us
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { Constants } from 'src/common/constants';
+import { Response } from 'express';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -38,11 +39,23 @@ describe('AuthController', () => {
   });
 
   it('should sign in', async () => {
-    const { token } = await controller.signIn({
-      email: 'u1@u1.com',
-      password: '1234',
-    });
-    expect(token).toBe('token-1');
+    const cookieFn = jest.fn();
+    await controller.signIn(
+      {
+        email: 'u1@u1.com',
+        password: '1234',
+      },
+      {
+        cookie: cookieFn,
+      } as unknown as Response,
+    );
+    expect(cookieFn).toHaveBeenCalledWith(
+      'token',
+      'token-1',
+      expect.objectContaining({
+        httpOnly: true,
+      }),
+    );
     expect(usersRepository.users[0].getSessions().length).toBe(1);
   });
 });
