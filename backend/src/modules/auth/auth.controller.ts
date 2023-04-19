@@ -26,6 +26,7 @@ export class AuthController {
       maxAge: Constants.AUTH_COOKIE_EXPIRES_IN,
       httpOnly: true,
       sameSite: request.secure ? 'none' : 'lax',
+      domain: request.hostname,
     });
   }
 
