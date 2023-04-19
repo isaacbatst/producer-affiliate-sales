@@ -6,12 +6,15 @@ import { Constants } from '../src/common/constants';
 import * as path from 'path';
 import * as fs from 'fs/promises';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { Encrypter } from 'src/infra/common/Encrypter/Encrypter';
 
 const resetDatabase = async (app: INestApplication) => {
-  const prisma: PrismaService = app.get('PRISMA_SERVICE');
+  const prisma = app.get<PrismaService>(Constants.PRISMA_SERVICE);
   await prisma.transaction.deleteMany();
   await prisma.product.deleteMany();
   await prisma.seller.deleteMany();
+  await prisma.session.deleteMany();
+  await prisma.user.deleteMany();
 };
 
 describe('AppController (e2e)', () => {
@@ -32,7 +35,21 @@ describe('AppController (e2e)', () => {
   });
 
   describe('Given valid login request', () => {
-    it('/auth/login (POST)', () => {
+    beforeAll(async () => {
+      const encrypter = app.get<Encrypter>(Constants.ENCRYPTER);
+      const hash = await encrypter.hash('1234');
+      const prisma = app.get<PrismaService>(Constants.PRISMA_SERVICE);
+      await prisma.user.create({
+        data: {
+          id: 'user-1',
+          email: 'u1@u1.com',
+          password: hash,
+          name: 'John Doe',
+        },
+      });
+    });
+
+    it('/auth/login (POST) with correct password', () => {
       return request(app.getHttpServer())
         .post('/auth/login')
         .send({
@@ -40,6 +57,16 @@ describe('AppController (e2e)', () => {
           password: '1234',
         })
         .expect(200);
+    });
+
+    it('/auth/login (POST) with incorrect password', () => {
+      return request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          email: 'u1@u1.com',
+          password: '123',
+        })
+        .expect(401);
     });
   });
 

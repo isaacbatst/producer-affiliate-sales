@@ -16,7 +16,7 @@ export class UsersRepositoryMemory implements UsersRepository {
   async findByEmail(email: string): Promise<User | undefined> {
     return this.users.find((user) => user.getEmail() === email);
   }
-  async update(user: User): Promise<void> {
+  async addSession(user: User): Promise<void> {
     const index = this.users.findIndex((u) => u.getId() === user.getId());
     this.users[index] = user;
   }

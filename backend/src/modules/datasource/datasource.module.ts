@@ -4,6 +4,7 @@ import { SellerRepositoryPrisma } from '../../infra/repositories/SellerRepositor
 import { PrismaService } from '../prisma/prisma.service';
 import { TransactionsRepositoryPrisma } from '../../infra/repositories/TransactionsRepository/TransactionsRepositoryPrisma';
 import { PrismaModule } from '../prisma/prisma.module';
+import { UsersRepositoryPrisma } from 'src/infra/repositories/UsersRepository/UsersRepositoryPrisma';
 
 @Module({
   imports: [PrismaModule],
@@ -24,11 +25,16 @@ import { PrismaModule } from '../prisma/prisma.module';
       provide: 'PRODUCTS_REPOSITORY',
       useClass: ProductsRepositoryPrisma,
     },
+    {
+      provide: 'USERS_REPOSITORY',
+      useClass: UsersRepositoryPrisma,
+    },
   ],
   exports: [
     'TRANSACTIONS_REPOSITORY',
     'SELLERS_REPOSITORY',
     'PRODUCTS_REPOSITORY',
+    'USERS_REPOSITORY',
   ],
 })
 export class DatasourceModule {}

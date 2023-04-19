@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
@@ -12,20 +12,20 @@ datasource db {
 }
 
 model Seller {
-  id                 String         @id
+  id                 String        @id
   name               String
   balance            Int
-  createdProducts    Product[]      @relation("creator")
-  affiliatedProducts Product[]      @relation("affiliates")
+  createdProducts    Product[]     @relation("creator")
+  affiliatedProducts Product[]     @relation("affiliates")
   transactions       Transaction[]
 }
 
 model Product {
-  id           String         @id
+  id           String        @id
   name         String
   price        Int
-  creator      Seller         @relation("creator", fields: [creatorId], references: [id])
-  affiliates   Seller[]       @relation("affiliates")
+  creator      Seller        @relation("creator", fields: [creatorId], references: [id])
+  affiliates   Seller[]      @relation("affiliates")
   creatorId    String
   transactions Transaction[]
 }
@@ -46,4 +46,19 @@ model Transaction {
   seller    Seller          @relation(fields: [sellerId], references: [id])
   productId String
   sellerId  String
+}
+
+model User {
+  id       String    @id
+  name     String
+  email    String    @unique
+  password String
+  sessions  Session[]
+}
+
+model Session {
+  token     String   @id
+  createdAt DateTime
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
 }

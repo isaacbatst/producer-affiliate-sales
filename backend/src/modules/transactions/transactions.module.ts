@@ -10,7 +10,7 @@ import { TransactionsService } from './transactions.service';
     TransactionsService,
     {
       provide: 'ID_GENERATOR',
-      useValue: new IdGeneratorCrypto(),
+      useClass: IdGeneratorCrypto,
     },
   ],
   imports: [DatasourceModule],

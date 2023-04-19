@@ -1,26 +1,21 @@
 import { Module } from '@nestjs/common';
-import { EncrypterFake } from 'src/infra/common/Encrypter/EncrypterFake';
-import { TokenGeneratorFake } from 'src/infra/common/TokenGenerator/TokenGeneratorFake';
+import { EncrypterBcrypt } from 'src/infra/common/Encrypter/EncrypterBcrypt';
+import { TokenGeneratorCrypto } from 'src/infra/common/TokenGenerator/TokenGeneratorCrypto';
 import { DatasourceModule } from '../datasource/datasource.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UsersRepositoryMemory } from 'src/infra/repositories/UsersRepository/UsersRepositoryMemory';
 
 @Module({
   controllers: [AuthController],
   providers: [
     AuthService,
     {
-      provide: 'USERS_REPOSITORY',
-      useValue: new UsersRepositoryMemory(),
-    },
-    {
       provide: 'ENCRYPTER',
-      useValue: new EncrypterFake(),
+      useClass: EncrypterBcrypt,
     },
     {
       provide: 'TOKEN_GENERATOR',
-      useValue: new TokenGeneratorFake(),
+      useClass: TokenGeneratorCrypto,
     },
   ],
   imports: [DatasourceModule],

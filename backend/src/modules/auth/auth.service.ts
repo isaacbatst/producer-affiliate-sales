@@ -33,7 +33,7 @@ export class AuthService {
       token,
     });
     user.addSession(session);
-    await this.usersRepository.update(user);
+    await this.usersRepository.addSession(user);
     return {
       token,
     };
