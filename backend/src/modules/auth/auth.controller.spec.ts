@@ -7,7 +7,8 @@ import { UsersRepositoryMemory } from 'src/infra/repositories/UsersRepository/Us
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { Constants } from 'src/common/constants';
-import { Response } from 'express';
+import { Request, Response } from 'express';
+import { AuthenticatedRequest } from './auth.request';
 
 describe('AuthController', () => {
   let controller: AuthController;

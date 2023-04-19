@@ -1,8 +1,8 @@
 import { Request } from 'express';
-import { User } from 'src/domain/User/User';
+import { UserDto } from '../users/users.dto';
 
 export interface AuthenticatedRequest extends Request {
   auth: {
-    user: User;
+    user: UserDto;
   };
 }

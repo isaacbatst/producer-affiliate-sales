@@ -18,12 +18,19 @@ const resetDatabase = async (app: INestApplication) => {
   await prisma.user.deleteMany();
 };
 
+const rootUser = {
+  id: 'user-1',
+  email: 'u1@u1.com',
+  password: '1234',
+  name: 'John Doe',
+};
+
 const login = async (app: INestApplication) => {
   const response = await request(app.getHttpServer())
     .post('/auth/login')
     .send({
-      email: 'u1@u1.com',
-      password: '1234',
+      email: rootUser.email,
+      password: rootUser.password,
     })
     .expect(200);
 
@@ -54,14 +61,12 @@ describe('AppController (e2e)', () => {
   describe('Given valid login request', () => {
     beforeAll(async () => {
       const encrypter = app.get<Encrypter>(Constants.ENCRYPTER);
-      const hash = await encrypter.hash('1234');
+      const hash = await encrypter.hash(rootUser.password);
       const prisma = app.get<PrismaService>(Constants.PRISMA_SERVICE);
       await prisma.user.create({
         data: {
-          id: 'user-1',
-          email: 'u1@u1.com',
+          ...rootUser,
           password: hash,
-          name: 'John Doe',
         },
       });
     });
@@ -70,8 +75,8 @@ describe('AppController (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/login')
         .send({
-          email: 'u1@u1.com',
-          password: '1234',
+          email: rootUser.email,
+          password: rootUser.password,
         })
         .expect(200);
 
@@ -83,10 +88,27 @@ describe('AppController (e2e)', () => {
       return request(app.getHttpServer())
         .post('/auth/login')
         .send({
-          email: 'u1@u1.com',
-          password: '123',
+          email: rootUser.email,
+          password: 'wrong',
         })
         .expect(401);
+    });
+
+    it('/auth/validate (POST)', async () => {
+      const { authCookie } = await login(app);
+      await request(app.getHttpServer())
+        .post('/auth/validate')
+        .set('Cookie', authCookie)
+        .expect(200)
+        .expect({
+          email: rootUser.email,
+          name: rootUser.name,
+          id: rootUser.id,
+        });
+    });
+
+    it('/auth/validate (POST) with incorrect token', async () => {
+      await request(app.getHttpServer()).post('/auth/validate').expect(401);
     });
   });
 
@@ -95,7 +117,7 @@ describe('AppController (e2e)', () => {
       return request(app.getHttpServer())
         .post('/auth/login')
         .send({
-          email: 'u1@u1.com',
+          email: rootUser.email,
         })
         .expect(400);
     });
@@ -104,7 +126,7 @@ describe('AppController (e2e)', () => {
       return request(app.getHttpServer())
         .post('/auth/login')
         .send({
-          password: '1234',
+          password: rootUser.password,
         })
         .expect(400);
     });

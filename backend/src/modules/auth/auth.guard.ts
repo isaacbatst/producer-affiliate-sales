@@ -37,7 +37,13 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    (request as AuthenticatedRequest).auth = { user };
+    (request as AuthenticatedRequest).auth = {
+      user: {
+        email: user.getEmail(),
+        id: user.getId(),
+        name: user.getName(),
+      },
+    };
     return true;
   }
 

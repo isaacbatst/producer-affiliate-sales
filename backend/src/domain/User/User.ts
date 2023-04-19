@@ -27,6 +27,12 @@ export class User {
     this.sessions.push(session);
   }
 
+  removeSession(session: Session): void {
+    this.sessions = this.sessions.filter(
+      (s) => s.getToken() !== session.getToken(),
+    );
+  }
+
   getId(): string {
     return this.id;
   }

@@ -3,6 +3,8 @@ import { TokenGenerator } from 'src/infra/common/TokenGenerator/TokenGenerator';
 import { Encrypter } from '../../infra/common/Encrypter/Encrypter';
 import { UsersRepository } from '../users/users.repository';
 import { Session } from 'src/domain/User/Session';
+import { User } from 'src/domain/User/User';
+import { UserDto } from '../users/users.dto';
 
 @Injectable()
 export class AuthService {
