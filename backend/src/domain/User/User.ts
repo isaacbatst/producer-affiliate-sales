@@ -1,8 +1,11 @@
+import { Session } from './Session';
+
 interface UserParams {
   id: string;
   name: string;
   email: string;
   password: string;
+  sessions?: Session[];
 }
 
 export class User {
@@ -10,12 +13,18 @@ export class User {
   private name: string;
   private email: string;
   private password: string;
+  private sessions: Session[];
 
-  constructor({ id, name, email, password }: UserParams) {
+  constructor({ id, name, email, password, sessions }: UserParams) {
     this.id = id;
     this.name = name;
     this.email = email;
     this.password = password;
+    this.sessions = sessions ?? [];
+  }
+
+  addSession(session: Session): void {
+    this.sessions.push(session);
   }
 
   getId(): string {
@@ -32,5 +41,9 @@ export class User {
 
   getPassword(): string {
     return this.password;
+  }
+
+  getSessions(): Session[] {
+    return this.sessions;
   }
 }
