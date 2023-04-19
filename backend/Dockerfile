@@ -12,4 +12,4 @@ COPY . .
 RUN npx prisma generate
 EXPOSE 3000
 ENTRYPOINT ["yarn"]
-CMD ["build", "&&", "yarn", "start:prod"]
+CMD ["start:prod"]
