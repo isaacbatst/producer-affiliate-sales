@@ -31,7 +31,39 @@ describe('AppController (e2e)', () => {
     await resetDatabase(app);
   });
 
-  describe('Given empty datasource', () => {
+  describe('Given valid login request', () => {
+    it('/auth/login (POST)', () => {
+      return request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          email: 'u1@u1.com',
+          password: '1234',
+        })
+        .expect(200);
+    });
+  });
+
+  describe('Given invalid login request', () => {
+    it('/auth/login (POST) without password', () => {
+      return request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          email: 'u1@u1.com',
+        })
+        .expect(400);
+    });
+
+    it('/auth/login (POST) without email', () => {
+      return request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          password: '1234',
+        })
+        .expect(400);
+    });
+  });
+
+  describe('Given empty transaction datasource', () => {
     it('/transactions (GET)', () => {
       return request(app.getHttpServer())
         .get('/transactions')
