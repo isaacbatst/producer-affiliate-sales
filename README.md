@@ -12,7 +12,8 @@ A transactions is a buy/sell contract. Each transaction changes the creator/affi
 - [x] **Home Page**: lists all transactions.
 - [x] **Seller Page**: shows seller balance and transactions.
 - [x] **Product Page**: show product creator/affiliates and transactions.
-- [ ] Error handling.
+- [x] **Authentication**
+- [X] **Error Handling**
 
 ## Setup
 
@@ -21,9 +22,16 @@ A transactions is a buy/sell contract. Each transaction changes the creator/affi
 The environment variables must be set as described on `.env.example` files. 
 
 - Frontend:
-  - **API_URL**: url to reach backend api.
+  - **API_URL**: url to reach api from client.
+  - **BACKEND_API_URL**: url to reach api from backend (nextjs server side funcions)
 - Backend
   - **DATABASE_URL**: url to reach postgres database. If you're using docker setup, the hostname is the database service name `database`.
+  - **FRONTEND_URL** url to recognize allowed frontend to config cors
+  - **ROOT_NAME**: root user name.
+  - **ROOT_PASSWORD**: root user password.
+  - **ROOT_EMAIL**: root user email.
+
+FRONTEND_URL= http://localhost:3001
 - Root:
   - **POSTGRES_PASSWORD**: postgres password for docker database container.
 
