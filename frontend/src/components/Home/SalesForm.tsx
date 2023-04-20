@@ -12,19 +12,24 @@ const SalesForm: React.FC<Props> = ({ apiGateway }: Props) => {
   const [successfullyProcessed, setSuccessfullyProcessed] = useState(false);
   const { mutate } = useSWRConfig();
   const input = useRef<HTMLInputElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
     try {
+      setIsLoading(true)
       setSuccessfullyProcessed(false)
       if(!input.current || !input.current.files || input.current.files.length === 0) {
         return
       }
       await apiGateway.processTransactions(input.current.files[0])
+      input.current.value = ""
       await mutate('transactions')
       setSuccessfullyProcessed(true)
     } catch (err) {
       console.error(err)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -40,8 +45,10 @@ const SalesForm: React.FC<Props> = ({ apiGateway }: Props) => {
         <button 
           type='submit'  
           className='bg-theme-yellow-500 border border-slate-900 py-3 w-full font-semibold   
-            rounded-lg hover:scale-105 transition-all active:opacity-70 mb-4 text-xl'>
-          Enviar
+            rounded-lg hover:scale-105 transition-all active:opacity-70 mb-4 text-xl'
+          disabled={isLoading}
+        >
+          {isLoading ? '...' : 'Enviar'}
         </button>
         {successfullyProcessed && (
           <div role='alert' aria-label='Sucesso'
