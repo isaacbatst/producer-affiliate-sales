@@ -1,9 +1,9 @@
+import { ValidationError } from '@/domain/Errors/ValidationError'
 import { ApiGateway } from '@/infra/gateways/ApiGateway'
 import React, { FormEvent, useRef, useState } from 'react'
 import { useSWRConfig } from "swr"
 import Alert from '../common/Alert'
-import { ValidationError } from '@/domain/Errors/ValidationError'
-import { AppError } from '@/domain/Errors/ AppError'
+import { SalesFormErrorHandler } from './SalesFormErrorHandler'
 
 const salesInputId = 'sales-input'
 
@@ -32,17 +32,15 @@ const SalesForm: React.FC<Props> = ({ apiGateway }: Props) => {
       await mutate('transactions')
       setSuccessfullyProcessed(true)
     } catch (err) {
-      if(err instanceof AppError){
-        setError(err.message)
-      } else {
-        setError('Não foi possível processar suas vendas :/')
-      }
+      const readableError = SalesFormErrorHandler.toReadable(err)
+      console.log('red', readableError)
+      setError(readableError)
     } finally {
       setIsLoading(false)
     }
   }
 
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onFileChange = () => {
     setError(null)
     setSuccessfullyProcessed(false)
   }
