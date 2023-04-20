@@ -1,6 +1,7 @@
 import { ApiGateway } from '@/infra/gateways/ApiGateway'
 import React, { FormEvent, useRef, useState } from 'react'
 import { useSWRConfig } from "swr"
+import Alert from '../common/Alert'
 
 const salesInputId = 'sales-input'
 
@@ -51,9 +52,7 @@ const SalesForm: React.FC<Props> = ({ apiGateway }: Props) => {
           {isLoading ? '...' : 'Enviar'}
         </button>
         {successfullyProcessed && (
-          <div role='alert' aria-label='Sucesso'
-            className='p-3 rounded-lg bg-green-500 text-white text-center w-full font-light'
-          >Vendas processadas com sucesso</div>
+          <Alert message='Vendas processadas com sucesso' type='success' />
         )}
       </form>
     </div>
