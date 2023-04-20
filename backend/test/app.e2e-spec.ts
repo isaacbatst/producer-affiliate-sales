@@ -110,6 +110,14 @@ describe('AppController (e2e)', () => {
     it('/auth/validate (POST) with incorrect token', async () => {
       await request(app.getHttpServer()).post('/auth/validate').expect(401);
     });
+
+    it('/auth/logout (POST)', async () => {
+      const { authCookie } = await login(app);
+      return request(app.getHttpServer())
+        .post('/auth/logout')
+        .set('Cookie', authCookie)
+        .expect(200);
+    });
   });
 
   describe('Given invalid login request', () => {

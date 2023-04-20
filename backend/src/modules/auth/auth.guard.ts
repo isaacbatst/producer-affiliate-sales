@@ -33,16 +33,13 @@ export class AuthGuard implements CanActivate {
     }
 
     const user = await this.usersRepository.findByToken(token);
-    if (!user) {
+    if (!user || user.isSessionExpired(token, new Date())) {
       throw new UnauthorizedException();
     }
 
     (request as AuthenticatedRequest).auth = {
-      user: {
-        email: user.getEmail(),
-        id: user.getId(),
-        name: user.getName(),
-      },
+      user,
+      token,
     };
     return true;
   }

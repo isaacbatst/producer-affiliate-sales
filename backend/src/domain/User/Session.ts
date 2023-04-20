@@ -1,3 +1,5 @@
+import { Constants } from 'src/common/constants';
+
 interface SessionParams {
   token: string;
   userId: string;
@@ -13,6 +15,12 @@ export class Session {
     this.token = token;
     this.userId = userId;
     this.createdAt = createdAt;
+  }
+
+  isExpired(now: Date) {
+    const expireTime =
+      this.createdAt.getTime() + Constants.AUTH_SESSION_EXPIRES_IN;
+    return now.getTime() > expireTime;
   }
 
   getToken(): string {

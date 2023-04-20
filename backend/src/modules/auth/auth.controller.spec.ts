@@ -1,13 +1,13 @@
 import { ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core/constants';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Response } from 'express';
+import { Constants } from 'src/common/constants';
 import { EncrypterFake } from 'src/infra/common/Encrypter/EncrypterFake';
 import { TokenGeneratorFake } from 'src/infra/common/TokenGenerator/TokenGeneratorFake';
 import { UsersRepositoryMemory } from 'src/infra/repositories/UsersRepository/UsersRepositoryMemory';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { Constants } from 'src/common/constants';
-import { Request, Response } from 'express';
 import { AuthenticatedRequest } from './auth.request';
 
 describe('AuthController', () => {
@@ -58,5 +58,22 @@ describe('AuthController', () => {
       }),
     );
     expect(usersRepository.users[0].getSessions().length).toBe(1);
+  });
+
+  it('should sign out', async () => {
+    const clearCookieFn = jest.fn();
+    await controller.logout(
+      {
+        auth: {
+          user: usersRepository.users[0],
+          token: 'token-1',
+        },
+      } as unknown as AuthenticatedRequest,
+      {
+        clearCookie: clearCookieFn,
+      } as unknown as Response,
+    );
+    expect(usersRepository.users[0].getSessions().length).toBe(0);
+    expect(clearCookieFn).toHaveBeenCalledWith(Constants.AUTH_COOKIE);
   });
 });

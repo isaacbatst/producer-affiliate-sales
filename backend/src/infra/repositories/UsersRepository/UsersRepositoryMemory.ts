@@ -26,4 +26,11 @@ export class UsersRepositoryMemory implements UsersRepository {
       user.getSessions().find((session) => session.getToken() === token),
     );
   }
+
+  async removeSession(user: User, token: string): Promise<void> {
+    const index = user
+      .getSessions()
+      .findIndex((session) => session.getToken() === token);
+    user.getSessions().splice(index, 1);
+  }
 }

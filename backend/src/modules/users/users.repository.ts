@@ -4,4 +4,5 @@ export interface UsersRepository {
   findByEmail(email: string): Promise<User | undefined>;
   findByToken(token: string): Promise<User | undefined>;
   addSession(user: User): Promise<void>;
+  removeSession(user: User, token: string): Promise<void>;
 }

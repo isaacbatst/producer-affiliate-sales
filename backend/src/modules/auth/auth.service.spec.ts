@@ -47,4 +47,9 @@ describe('AuthService', () => {
     encrypter.isValidPassword = false;
     await expect(service.signIn('u1@u1.com', '1234')).rejects.toThrow();
   });
+
+  it('should sign out', async () => {
+    await service.signOut(usersRepository.users[0], 'token-1');
+    expect(usersRepository.users[0].getSessions().length).toBe(0);
+  });
 });

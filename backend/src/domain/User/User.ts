@@ -27,10 +27,18 @@ export class User {
     this.sessions.push(session);
   }
 
-  removeSession(session: Session): void {
+  removeSession(token: string): void {
     this.sessions = this.sessions.filter(
-      (s) => s.getToken() !== session.getToken(),
+      (session) => session.getToken() !== token,
     );
+  }
+
+  isSessionExpired(token: string, now: Date): boolean {
+    const session = this.sessions.find(
+      (session) => session.getToken() === token,
+    );
+
+    return session?.isExpired(now) ?? false;
   }
 
   getId(): string {

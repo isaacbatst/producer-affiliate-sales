@@ -60,4 +60,19 @@ export class UsersRepositoryPrisma implements UsersRepository {
 
     return UsersRepositoryPrismaMapper.toDomain(session.user);
   }
+
+  async removeSession(user: User, token: string): Promise<void> {
+    await this.prisma.user.update({
+      where: {
+        id: user.getId(),
+      },
+      data: {
+        sessions: {
+          delete: {
+            token,
+          },
+        },
+      },
+    });
+  }
 }
