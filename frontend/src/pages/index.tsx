@@ -79,7 +79,8 @@ export default function Login() {
             />
           </div>
           <button type='submit' 
-            className='font-semibold bg-theme-yellow-500 rounded-lg border border-slate-300 py-3 mb-3'>
+            className='font-semibold bg-theme-yellow-500 rounded-lg border
+             border-slate-300 py-3 mb-3 hover:scale-105 transition-all active:opacity-70'>
             Entrar
           </button>
           {submitError && <p className='text-red-500' role='alert'>{submitError}</p>}

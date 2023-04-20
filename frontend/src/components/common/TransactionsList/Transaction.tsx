@@ -31,7 +31,7 @@ const Transaction = ({transaction, indicateOperation}: Props) => {
       </div>
       <p className='text-sm mb-1'><strong className='text-base'>Vendedor:</strong>
         <Link href={`/sellers/${transaction.seller.id}`}
-          className='bg-theme-yellow-500 hover:bg-theme-yellow-600 transition-colors inline-block
+          className='bg-theme-yellow-500 hover:scale-105 transition-all active:opacity-70 inline-block
         px-3 py-1 ml-1 text-slate-900 border border-slate-900 rounded-lg font-medium active:scale-105'
         >
           {transaction.seller.name} 
@@ -39,7 +39,7 @@ const Transaction = ({transaction, indicateOperation}: Props) => {
       </p>
       <p className='text-sm'><strong className='text-base'>Produto:</strong>
         <Link href={`/products/${transaction.product.id}`}
-          className='bg-theme-yellow-500 hover:bg-theme-yellow-600 transition-colors inline-block
+          className='bg-theme-yellow-500 hover:scale-105 transition-all active:opacity-70 inline-block
         px-3 py-1 ml-1 text-slate-900 border border-slate-900 rounded-lg font-medium active:scale-105'
         >
           {transaction.product.name} 

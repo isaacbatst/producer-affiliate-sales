@@ -40,7 +40,7 @@ const SalesForm: React.FC<Props> = ({ apiGateway }: Props) => {
         <button 
           type='submit'  
           className='bg-theme-yellow-500 border border-slate-900 py-3 w-full font-semibold   
-            rounded-lg hover:bg-theme-yellow-600 transition-colors mb-4 text-xl'>
+            rounded-lg hover:scale-105 transition-all active:opacity-70 mb-4 text-xl'>
           Enviar
         </button>
         {successfullyProcessed && (
