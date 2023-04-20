@@ -25,8 +25,7 @@ export class AuthController {
     response.cookie(Constants.AUTH_COOKIE, token, {
       maxAge: Constants.AUTH_COOKIE_EXPIRES_IN,
       httpOnly: true,
-      sameSite: request.secure ? 'none' : 'lax',
-      domain: request.hostname,
+      secure: process.env.NODE_ENV === 'production',
     });
   }
 

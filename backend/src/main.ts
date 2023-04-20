@@ -12,6 +12,7 @@ async function bootstrap() {
     credentials: true,
     origin: process.env.FRONTEND_URL,
   });
+  app.setGlobalPrefix('api');
   app.use(cookieParser());
   await app.listen(3000);
 }
