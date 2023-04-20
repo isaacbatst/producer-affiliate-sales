@@ -32,8 +32,6 @@ The environment variables must be set as described on `.env.example` files.
   - **ROOT_NAME**: root user name.
   - **ROOT_PASSWORD**: root user password.
   - **ROOT_EMAIL**: root user email.
-
-FRONTEND_URL= http://localhost:3001
 - Root:
   - **POSTGRES_PASSWORD**: postgres password for docker database container.
 
