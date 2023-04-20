@@ -18,7 +18,7 @@ const Header: React.FC = () => {
   }
 
   return (
-    <header className='py-5 bg-slate-900 flex flex-col'>
+    <header className='p-5 bg-slate-900 flex flex-col'>
       <div className="flex justify-between items-center container mx-auto">
         <Link href='/'>
           <h1 className='text-2xl font-bold text-white'>Criadores e Afiliados</h1>

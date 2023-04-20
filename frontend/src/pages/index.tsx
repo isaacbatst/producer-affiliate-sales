@@ -63,8 +63,8 @@ export default function Login() {
   return (
     <main className="flex flex-col min-h-screen">
       <Header />
-      <section className='py-10 flex flex-col items-center'>
-        <h1 className='text-center text-3xl mb-10'>Logue para acessar o sistema</h1>
+      <section className='pt-10 flex flex-col items-center'>
+        <h1 className='text-center text-xl mb-10'>Logue para acessar o sistema</h1>
         <form className='flex flex-col' onSubmit={onSubmit}>
           <div className='mb-3 flex flex-col'>
             <label htmlFor="email" className='mr-3 text-lg'>E-mail</label>
