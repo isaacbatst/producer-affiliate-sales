@@ -56,6 +56,13 @@ describe('TransactionsController', () => {
     expect(transactionsRepository.transactions).toHaveLength(20);
   });
 
+  it('should process transactions twice', async () => {
+    const file = await getSalesFileMock();
+    await controller.processTransactions(file);
+    await controller.processTransactions(file);
+    expect(transactionsRepository.transactions).toHaveLength(40);
+  });
+
   it('should return all transactions', async () => {
     const file = await getSalesFileMock();
     await controller.processTransactions(file);

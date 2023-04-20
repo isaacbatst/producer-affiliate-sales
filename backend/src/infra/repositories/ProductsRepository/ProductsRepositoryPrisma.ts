@@ -49,6 +49,7 @@ export class ProductsRepositoryPrisma implements ProductsRepository {
       },
       include: {
         creator: true,
+        affiliates: true,
       },
     });
 

@@ -56,6 +56,13 @@ describe('TransactionsService', () => {
     expect(transactionsRepository.transactions).toHaveLength(20);
   });
 
+  it('should process transactions twice', async () => {
+    await service.processTransactions(getTransactionsMock());
+    await service.processTransactions(getTransactionsMock());
+
+    expect(transactionsRepository.transactions).toHaveLength(40);
+  });
+
   it('should return all transactions', async () => {
     await service.processTransactions(getTransactionsMock());
     const transactions = await service.getAll();

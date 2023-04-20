@@ -212,6 +212,19 @@ describe('AppController (e2e)', () => {
       expect(products.body).toHaveLength(3);
     });
 
+    it('/transactions/process (POST) one more time', async () => {
+      const filePath = path.join(Constants.ROOT_DIR, 'sample', 'sales.txt');
+      const fileExists = fs.stat(filePath).then((stats) => stats.isFile());
+      expect(fileExists).toBeTruthy();
+
+      await request(app.getHttpServer())
+        .post('/transactions/process')
+        .set('Content-Type', 'multipart/form-data')
+        .set('Cookie', authCookie)
+        .attach('sales', filePath)
+        .expect(204);
+    });
+
     it('/products/:id/transactions (GET)', async () => {
       const products = await request(app.getHttpServer())
         .get('/products')
