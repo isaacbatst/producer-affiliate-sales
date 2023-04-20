@@ -2,6 +2,8 @@ import { ApiGateway } from '@/infra/gateways/ApiGateway'
 import React, { FormEvent, useRef, useState } from 'react'
 import { useSWRConfig } from "swr"
 import Alert from '../common/Alert'
+import { ValidationError } from '@/domain/Errors/ValidationError'
+import { AppError } from '@/domain/Errors/ AppError'
 
 const salesInputId = 'sales-input'
 
@@ -14,24 +16,35 @@ const SalesForm: React.FC<Props> = ({ apiGateway }: Props) => {
   const { mutate } = useSWRConfig();
   const input = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
     try {
+      setError(null)
       setIsLoading(true)
       setSuccessfullyProcessed(false)
       if(!input.current || !input.current.files || input.current.files.length === 0) {
-        return
+        throw new ValidationError('Nenhum arquivo selecionado')
       }
       await apiGateway.processTransactions(input.current.files[0])
       input.current.value = ""
       await mutate('transactions')
       setSuccessfullyProcessed(true)
     } catch (err) {
-      console.error(err)
+      if(err instanceof AppError){
+        setError(err.message)
+      } else {
+        setError('Não foi possível processar suas vendas :/')
+      }
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError(null)
+    setSuccessfullyProcessed(false)
   }
 
   return (
@@ -41,7 +54,9 @@ const SalesForm: React.FC<Props> = ({ apiGateway }: Props) => {
           <label htmlFor={salesInputId} className='text-center mb-8 text-xl md:text-5xl font-semibold'>
             Registre suas vendas aqui
           </label>
-          <input type='file' name='sales' id={salesInputId} accept='.txt' className='mb-4 text-sm' ref={input} />
+          <input onChange={onFileChange} type='file' name='sales' id={salesInputId} 
+            accept='.txt' className='mb-4 text-sm' ref={input} 
+          />
         </div>
         <button 
           type='submit'  
@@ -54,6 +69,11 @@ const SalesForm: React.FC<Props> = ({ apiGateway }: Props) => {
         {successfullyProcessed && (
           <Alert message='Vendas processadas com sucesso' type='success' />
         )}
+        {
+          error && (
+            <Alert message={error} type='error' />
+          )
+        }
       </form>
     </div>
   )
