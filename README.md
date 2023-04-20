@@ -6,6 +6,8 @@ This platform works with creator-affiliate structure, in which a creator sells h
 
 A transactions is a buy/sell contract. Each transaction changes the creator/affiliate balance.
 
+[Visit here](https://ceaf.codandomuito.com.br)
+
 ## Features
 
 - [x] **Home Page**: uploads sales files, processes and persists the operation.
