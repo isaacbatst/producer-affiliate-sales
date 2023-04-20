@@ -60,4 +60,8 @@ export class ApiGatewayAxios implements ApiGateway {
   async login(email: string, password: string): Promise<void> {
     await this.axios.post('/auth/login', { email, password })
   }
+
+  async logout(): Promise<void> {
+    await this.axios.post('/auth/logout')
+  }
 }

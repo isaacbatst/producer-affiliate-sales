@@ -132,4 +132,8 @@ export class ApiGatewayFake implements ApiGateway {
   async login(): Promise<void> {
     return Promise.resolve();
   }
+
+  async logout(): Promise<void> {
+    return Promise.resolve();
+  }
 }

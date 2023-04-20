@@ -1,14 +1,13 @@
 import Header from '@/components/common/Header'
+import { useApiGateway } from '@/contexts/ApiGatewayContext'
 import { AppError } from '@/domain/Errors/ AppError'
 import { ValidationError } from '@/domain/Errors/ValidationError'
-import { ApiGatewayFactory } from '@/infra/gateways/ApiGatewayFactory'
 import { redirectIfAuthorized } from '@/infra/validateAuth'
 import axios from 'axios'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import { FormEventHandler, useRef, useState } from 'react'
-
-const apiGateway = ApiGatewayFactory.make()
+import { useSWRConfig } from 'swr'
 
 class LoginSubmitErrorHandler {
   static handle(error: unknown): string {
@@ -33,9 +32,11 @@ class LoginSubmitErrorHandler {
 }
 
 export default function Login() {
+  const {apiGateway} = useApiGateway()
   const emailRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
+  const {mutate} = useSWRConfig()
   const [submitError, setSubmitError] = useState<string | null>(null)
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
@@ -51,6 +52,7 @@ export default function Login() {
       }
 
       await apiGateway.login(email, password)
+      await mutate('auth')
       router.push('/home')
     } catch (error) {
       const readableError = LoginSubmitErrorHandler.handle(error)
@@ -88,5 +90,5 @@ export default function Login() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  return redirectIfAuthorized(apiGateway, context.req.headers.cookie)
+  return redirectIfAuthorized(context.req.headers.cookie)
 }

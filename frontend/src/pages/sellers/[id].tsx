@@ -1,19 +1,18 @@
 import Header from '@/components/common/Header'
 import ItemSection from '@/components/common/ItemSection'
 import TransactionsList from '@/components/common/TransactionsList/TransactionsList'
+import { useApiGateway } from '@/contexts/ApiGatewayContext'
 import { Money } from '@/domain/Money'
 import { useSeller } from '@/hooks/useSeller'
 import { useSellerTransactions } from '@/hooks/useSellerTransactions'
-import { ApiGatewayFactory } from '@/infra/gateways/ApiGatewayFactory'
 import { redirectIfUnauthorized } from '@/infra/validateAuth'
 import { GetServerSideProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 
-const apiGateway = ApiGatewayFactory.make()
-
 const SellerPage: NextPage = () => {
   const router = useRouter()
   const sellerId = router.query.id as string
+  const {apiGateway} = useApiGateway()
   const {isLoading: isLoadingTransactions, transactions} = useSellerTransactions(sellerId, apiGateway)
   const { isLoading: isLoadingSeller, seller } = useSeller(sellerId, apiGateway)
   return (
@@ -41,7 +40,7 @@ const SellerPage: NextPage = () => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  return redirectIfUnauthorized(apiGateway, context.req.headers.cookie)
+  return redirectIfUnauthorized(context.req.headers.cookie)
 }
 
 export default SellerPage

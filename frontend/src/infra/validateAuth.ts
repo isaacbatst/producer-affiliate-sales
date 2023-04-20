@@ -1,6 +1,12 @@
-import { ApiGateway } from "./gateways/ApiGateway"
+import axios from "axios"
+import { ApiGatewayFactory } from "./gateways/ApiGatewayFactory"
 
-export const redirectIfUnauthorized = async (apiGateway: ApiGateway, cookie: string | undefined) => {
+if(!process.env.BACKEND_API_URL) {
+  throw new Error('BACKEND_API_URL is not defined')
+}
+
+const apiGateway = ApiGatewayFactory.make(process.env.BACKEND_API_URL)
+export const redirectIfUnauthorized = async (cookie: string | undefined) => {
   try {
     const user = await apiGateway.validateAuth(cookie)
     return {
@@ -18,9 +24,10 @@ export const redirectIfUnauthorized = async (apiGateway: ApiGateway, cookie: str
   }
 }
 
-export const redirectIfAuthorized = async (apiGateway: ApiGateway, cookie: string | undefined) => {
+export const redirectIfAuthorized = async (cookie: string | undefined) => {
   try {
     const user = await apiGateway.validateAuth(cookie)
+    console.log('user', user)
     return {
       redirect: {
         destination: '/home',
@@ -30,7 +37,10 @@ export const redirectIfAuthorized = async (apiGateway: ApiGateway, cookie: strin
         user
       }
     }
-  } catch {
+  } catch(err) {
+    if(axios.isAxiosError(err)){
+      console.log('response status', err.code, err.message)
+    }
     return {
       props: {}
     }

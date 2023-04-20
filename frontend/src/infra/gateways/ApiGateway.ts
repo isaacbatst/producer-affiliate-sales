@@ -10,6 +10,7 @@ export interface ApiGateway {
   getProduct(id: string): Promise<ProductDto>
   getProductTransactions(id: string): Promise<TransactionDto[]>
   getSellerTransactions(id: string): Promise<TransactionDto[]>
-  validateAuth(cookie: string | undefined): Promise<UserDto>
+  validateAuth(cookie?: string | undefined): Promise<UserDto>
   login(email: string, password: string): Promise<void>
+  logout(): Promise<void>
 }

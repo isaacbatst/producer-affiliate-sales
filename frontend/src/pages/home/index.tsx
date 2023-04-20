@@ -1,19 +1,17 @@
 import Header from '@/components/common/Header'
 import TransactionsList from '@/components/common/TransactionsList/TransactionsList'
 import SalesForm from '@/components/Home/SalesForm'
+import { useApiGateway } from '@/contexts/ApiGatewayContext'
 import { useTransactions } from '@/hooks/useTransactions'
-import { ApiGatewayFactory } from '@/infra/gateways/ApiGatewayFactory'
 import { redirectIfUnauthorized } from '@/infra/validateAuth'
 import { GetServerSideProps } from 'next'
 
-const apiGateway = ApiGatewayFactory.make()
-
 export default function Home() {
+  const {apiGateway} = useApiGateway()
   const {isLoading, transactions} = useTransactions(apiGateway)
-
   return (
     <main className="flex flex-col min-h-screen">
-      <Header />
+      <Header/>
       <SalesForm apiGateway={apiGateway} />
       <TransactionsList isLoading={isLoading} transactions={transactions} />
     </main>
@@ -21,7 +19,5 @@ export default function Home() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  console.log(context.req.headers.cookie)
-
-  return redirectIfUnauthorized(apiGateway, context.req.headers.cookie)
+  return redirectIfUnauthorized(context.req.headers.cookie)
 }
